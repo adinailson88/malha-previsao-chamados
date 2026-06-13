@@ -1,0 +1,19 @@
+# Artefatos academicos do artigo ficam no Google Drive, nao no repositorio publico.
+docs/artigo/
+
+# Saidas locais de renderizacao/validacao de documentos.
+render_artigo_revisao*/
+
+# Cache Python local.
+__pycache__/
+*.pyc
+
+# Ambientes locais.
+.venv/
+venv/
+
+# Credenciais locais reconstruidas em workflows.
+autenticacao_google.json
+chaves_api.json
+credenciais*.json
+*.secret.json

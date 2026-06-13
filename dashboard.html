@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malha IA — Previsão Temporal · Módulo 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot@4.2.6/build/index.umd.min.js"></script>
+
+<style>
+:root {
+  --ufsb-azul: #002878;
+  --ufsb-azul-escuro: #001a50;
+  --ufsb-azul-medio: #003399;
+  --ufsb-azul-claro: #e6ecf7;
+  --ufsb-azul-hover: #d0dcf2;
+  --ufsb-cinza: #323232;
+  --ufsb-cinza-claro: #f4f4f4;
+  --ufsb-cinza-medio: #888888;
+  --ufsb-cinza-borda: #d4d4d4;
+  --ufsb-branco: #ffffff;
+  --ufsb-verde: #1a6e35;
+  --ufsb-verde-bg: #e6f2eb;
+  --ufsb-amarelo: #b07000;
+  --ufsb-amarelo-bg: #fdf3e0;
+  --ufsb-vermelho: #8b1a1a;
+  --ufsb-vermelho-bg: #f9e8e8;
+  --font-inst: 'Barlow Condensed', 'Franklin Gothic Medium', Arial, sans-serif;
+  --font-body: 'Barlow', 'Franklin Gothic Book', Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); color: var(--ufsb-cinza); background: var(--ufsb-branco); line-height: 1.5; }
+#app { padding: 0 0 2rem; }
+
+.ufsb-header { background: var(--ufsb-azul); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.ufsb-logo-txt { line-height: 1.15; }
+.ufsb-sigla { font-family: var(--font-inst); font-size: 24px; font-weight: 700; color: var(--ufsb-branco); letter-spacing: 0.02em; }
+.ufsb-nome { font-family: var(--font-inst); font-size: 12px; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; text-transform: uppercase; }
+.header-sistema { font-family: var(--font-inst); font-size: 14px; color: rgba(255,255,255,0.75); letter-spacing: 0.05em; text-transform: uppercase; }
+
+.ufsb-status-bar { background: var(--ufsb-azul-escuro); padding: 8px 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.status-info { display: flex; align-items: center; gap: 10px; }
+.pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.pulse-green { background: #4caf50; animation: pulseAnim 1.4s infinite; }
+.pulse-gray { background: rgba(255,255,255,0.35); }
+.pulse-red { background: #e07070; animation: pulseAnim 1.4s infinite; }
+@keyframes pulseAnim { 0%,100%{opacity:1} 50%{opacity:0.25} }
+.status-txt { font-family: var(--font-inst); font-size: 12px; color: rgba(255,255,255,0.85); letter-spacing: 0.04em; text-transform: uppercase; }
+.btn-reload { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: var(--ufsb-branco); padding: 4px 12px; font-family: var(--font-inst); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; border-radius: 3px; }
+.btn-reload:hover { background: rgba(255,255,255,0.1); }
+
+.tabs { display: flex; border-bottom: 2px solid var(--ufsb-azul); margin: 0 24px 1.5rem; flex-wrap: wrap; }
+.tab { padding: 10px 18px; font-size: 12px; font-family: var(--font-inst); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; border: none; background: transparent; color: var(--ufsb-cinza-medio); border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.tab.active { color: var(--ufsb-azul); border-bottom-color: var(--ufsb-azul); background: var(--ufsb-azul-claro); }
+.tab:hover:not(.active) { color: var(--ufsb-azul); background: var(--ufsb-azul-claro); }
+
+.screen { display: none; padding: 0 24px; }
+.screen.active { display: block; }
+
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+.metric { background: var(--ufsb-azul-claro); border-left: 3px solid var(--ufsb-azul); padding: 14px 16px; border-radius: 0 3px 3px 0; }
+.metric-label { font-family: var(--font-inst); font-size: 11px; font-weight: 600; color: var(--ufsb-azul); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.metric-val { font-family: var(--font-inst); font-size: 28px; font-weight: 700; color: var(--ufsb-azul); line-height: 1; }
+.metric-sub { font-size: 11px; color: var(--ufsb-cinza-medio); margin-top: 4px; }
+
+.card { background: var(--ufsb-branco); border: 1px solid var(--ufsb-cinza-borda); border-top: 3px solid var(--ufsb-azul); border-radius: 0 0 3px 3px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.card-title { font-family: var(--font-inst); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ufsb-azul); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--ufsb-azul-claro); }
+
+.lote-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--ufsb-cinza-borda); font-size: 13px; }
+.lote-row:last-child { border-bottom: none; }
+.lote-id { font-family: var(--font-inst); font-size: 11px; color: var(--ufsb-cinza-medio); width: 50px; flex-shrink: 0; }
+.lote-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 100px; }
+.lote-cat { font-family: var(--font-inst); font-size: 12px; font-weight: 600; color: var(--ufsb-azul); flex-shrink: 0; max-width: 220px; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lote-conf { width: 70px; text-align: right; flex-shrink: 0; }
+.lote-crit { width: 70px; text-align: right; flex-shrink: 0; }
+
+.badge { display: inline-block; font-family: var(--font-inst); font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; }
+.badge-ok { background: var(--ufsb-verde-bg); color: var(--ufsb-verde); }
+.badge-warn { background: var(--ufsb-amarelo-bg); color: var(--ufsb-amarelo); }
+.badge-err { background: var(--ufsb-vermelho-bg); color: var(--ufsb-vermelho); }
+.badge-info { background: var(--ufsb-azul-claro); color: var(--ufsb-azul); }
+
+.log-area { background: var(--ufsb-cinza); border-radius: 2px; padding: 10px 12px; font-family: 'Courier New', monospace; font-size: 11px; height: 240px; overflow-y: auto; display: flex; flex-direction: column-reverse; }
+.log-line { padding: 1px 0; line-height: 1.6; }
+.log-ok { color: #7ecf7e; }
+.log-warn { color: #f0c060; }
+.log-err { color: #e07070; }
+.log-info { color: #7ab4f0; }
+
+.chart-wrap { position: relative; width: 100%; height: 320px; }
+.chart-wrap-sm { position: relative; width: 100%; height: 240px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+@media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } }
+
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tbl th { background: var(--ufsb-azul-claro); color: var(--ufsb-azul); font-family: var(--font-inst); font-weight: 700; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 10px; text-align: left; border-bottom: 2px solid var(--ufsb-azul); }
+.tbl td { padding: 6px 10px; border-bottom: 1px solid var(--ufsb-cinza-borda); }
+.tbl tr:hover td { background: var(--ufsb-cinza-claro); }
+.tbl-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.tbl-scroll { max-height: 360px; overflow-y: auto; border: 1px solid var(--ufsb-cinza-borda); border-radius: 2px; }
+.tbl-scroll table { font-size: 11px; }
+.tbl-scroll th { position: sticky; top: 0; z-index: 1; }
+
+.empty-state { text-align: center; padding: 2rem 1rem; font-family: var(--font-inst); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ufsb-cinza-medio); }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--ufsb-azul-claro); border-top-color: var(--ufsb-azul); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.legend-line { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; font-size: 11px; font-family: var(--font-inst); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ufsb-cinza-medio); }
+.leg-dot { width: 10px; height: 10px; border-radius: 1px; display: inline-block; vertical-align: middle; margin-right: 4px; }
+
+.model-select { font-family: var(--font-inst); font-size: 11px; padding: 4px 8px; border: 1px solid var(--ufsb-cinza-borda); background: var(--ufsb-branco); color: var(--ufsb-azul); border-radius: 3px; cursor: pointer; }
+
+.info-box { background: var(--ufsb-azul-claro); border-left: 3px solid var(--ufsb-azul); padding: 10px 14px; font-size: 12px; margin-bottom: 1rem; border-radius: 0 3px 3px 0; }
+
+footer.app-footer { margin-top: 2rem; padding: 1rem 24px; border-top: 1px solid var(--ufsb-cinza-borda); font-family: var(--font-inst); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ufsb-cinza-medio); text-align: center; }
+
+.modulo-nav { font-family: var(--font-inst); font-size: 11px; letter-spacing: 0.05em; color: rgba(255,255,255,0.6); }
+.modulo-nav a { color: rgba(255,255,255,0.8); text-decoration: none; }
+.modulo-nav a:hover { color: #fff; }
+.modulo-nav span.modulo-atual { color: #fff; font-weight: 700; }
+
+/* Model toggles — Módulo 2 */
+.model-toggles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; font-size: 11px; font-family: var(--font-inst); font-weight: 600; text-transform: uppercase; color: var(--ufsb-azul); }
+.model-toggles label { display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 4px 8px; background: var(--ufsb-azul-claro); border-radius: 3px; }
+.model-toggles input[type="checkbox"] { accent-color: var(--ufsb-azul); }
+
+/* Correlation matrix — Módulo 2 */
+.corr-tbl { border-collapse: collapse; font-size: 11px; font-variant-numeric: tabular-nums; }
+.corr-tbl th { background: var(--ufsb-azul-claro); color: var(--ufsb-azul); font-family: var(--font-inst); font-weight: 700; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 8px; border: 1px solid var(--ufsb-cinza-borda); text-align: center; }
+.corr-tbl td { padding: 5px 7px; border: 1px solid var(--ufsb-cinza-borda); text-align: center; font-weight: 600; }
+.corr-pos-strong { background: #c8e6c9; color: #1b5e20; }
+.corr-pos-mid    { background: #dcedc8; color: #33691e; }
+.corr-pos-weak   { background: #f5f5f5; color: #555; }
+.corr-neg-strong { background: #ffcdd2; color: #b71c1c; }
+.corr-neg-mid    { background: #ffe0b2; color: #bf360c; }
+.corr-diag       { background: var(--ufsb-azul-claro); color: var(--ufsb-azul); }
+.corr-na         { background: #fafafa; color: #bbb; }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <header class="ufsb-header">
+    <div class="ufsb-logo-txt">
+      <div class="ufsb-sigla">UFSB</div>
+      <div class="ufsb-nome">Universidade Federal do Sul da Bahia</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="header-sistema">Malha IA — Previsão Temporal · Módulo 2</div>
+      <div class="modulo-nav" style="margin-top:4px;">
+        <a href="index.html">← Início</a> &nbsp;|&nbsp;
+        <a href="https://adinailson88.github.io/malha-ia/">Hub Malha IA</a> &nbsp;|&nbsp;
+        <span class="modulo-atual">Módulo 2</span> &nbsp;|&nbsp;
+        <a href="https://github.com/adinailson88/malha-ia">Dados centrais</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="ufsb-status-bar">
+    <div class="status-info">
+      <span class="pulse pulse-gray" id="status-dot"></span>
+      <span class="status-txt" id="status-label">Aguardando dados...</span>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <span class="status-txt" id="ultima-att" style="opacity:0.6;"></span>
+      <button class="btn-reload" onclick="carregarTudo()">Atualizar</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('screen-preditivo',this)">Previsão Temporal</button>
+    <button class="tab" onclick="switchTab('screen-residuos',this)">Resíduos</button>
+    <button class="tab" onclick="switchTab('screen-pressupostos',this)">Pressupostos</button>
+    <button class="tab" onclick="switchTab('screen-contexto',this)">Variáveis Exógenas</button>
+  </div>
+
+  <!-- ===== TAB 1: PREVISÃO TEMPORAL ===== -->
+  <div class="screen active" id="screen-preditivo">
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">Filtros</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+        <div>
+          <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Campus</div>
+          <select id="filtro-campus" class="model-select" onchange="onFiltroChange()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Tipo</div>
+          <select id="filtro-tipo" class="model-select" onchange="onFiltroChange()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Categoria</div>
+          <select id="filtro-categoria" class="model-select" onchange="onFiltroChange()">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <button class="btn-reload" style="margin-bottom:0;" onclick="onFiltroChange()">Aplicar</button>
+        <button class="btn-reload" style="margin-bottom:0;background:rgba(255,255,255,0.08);" onclick="resetFiltros()">Limpar</button>
+        <span id="filtro-status" style="font-family:var(--font-inst);font-size:11px;color:var(--ufsb-cinza-medio);"></span>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:1rem;flex-wrap:wrap;">
+      <div id="prev-info" class="info-box" style="margin-bottom:0;flex:1;min-width:200px;"></div>
+      <div id="semaforo-confianca" style="font-family:var(--font-inst);font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:8px 14px;border-radius:3px;background:var(--ufsb-azul-claro);color:var(--ufsb-azul);">—</div>
+    </div>
+
+    <div id="model-toggles" class="model-toggles"></div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px;">
+      <div>
+        <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Início</div>
+        <select id="range-inicio" class="model-select" onchange="atualizarGraficoPrevisao()"></select>
+      </div>
+      <div>
+        <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Fim</div>
+        <select id="range-fim" class="model-select" onchange="atualizarGraficoPrevisao()"></select>
+      </div>
+      <button class="btn-reload" style="align-self:flex-end;" onclick="resetRangePrevisao()">Resetar Período</button>
+      <label style="align-self:flex-end;display:flex;align-items:center;gap:6px;font-family:var(--font-inst);font-size:11px;font-weight:600;text-transform:uppercase;color:var(--ufsb-azul);cursor:pointer;">
+        <input type="checkbox" id="toggle-precip" style="accent-color:var(--ufsb-azul);" onchange="atualizarGraficoPrevisao()">
+        Precipitação
+      </label>
+    </div>
+
+    <div style="position:relative;width:100%;height:360px;margin-bottom:8px;">
+      <canvas id="chartPrevisao"></canvas>
+    </div>
+    <div id="legend-previsao" class="legend-line" style="margin-bottom:10px;"></div>
+    <div style="margin-bottom:1rem;">
+      <button class="btn-reload" style="background:var(--ufsb-azul);border-color:var(--ufsb-azul);" onclick="exportarGraficoPNG('chartPrevisao','previsao_temporal')">Exportar PNG</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Métricas Holdout</div>
+      <div id="metricas-prev"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Validação Cruzada</div>
+      <div id="metricas-cv"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Detalhes dos Modelos</div>
+      <div id="detalhes-modelos"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Incertezas Bootstrap</div>
+      <div id="incertezas-bootstrap"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Diagnóstico de Resíduos</div>
+      <div id="diagnostico-residuos"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Previsão por Categoria</div>
+      <div id="tabela-por-categoria"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Área sob Manutenção</div>
+      <div style="position:relative;width:100%;height:240px;">
+        <canvas id="chart-area-manutencao"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Confiança da Previsão por Filtro</div>
+      <div id="tabela-confianca"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+  </div><!-- /screen-preditivo -->
+
+  <!-- ===== TAB 2: RESÍDUOS ===== -->
+  <div class="screen" id="screen-residuos">
+
+    <div style="margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);">Modelo</div>
+      <select id="select-modelo-residuo" class="model-select" onchange="renderGraficosResiduos()"></select>
+    </div>
+
+    <div id="residuo-stats" class="info-box" style="margin-bottom:1rem;"></div>
+
+    <div class="grid-3">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">Boxplot</div>
+        <div style="position:relative;width:100%;height:220px;">
+          <canvas id="chartBoxplot"></canvas>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">Histograma</div>
+        <div style="position:relative;width:100%;height:220px;">
+          <canvas id="chartHistograma"></canvas>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">Q-Q Plot</div>
+        <div style="position:relative;width:100%;height:220px;">
+          <canvas id="chartQQ"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /screen-residuos -->
+
+  <!-- ===== TAB 3: PRESSUPOSTOS ===== -->
+  <div class="screen" id="screen-pressupostos">
+
+    <div id="ranking-modelos" class="card" style="margin-bottom:1rem;">
+      <div class="card-title">Ranking dos Modelos</div>
+      <div id="ranking-modelos-content"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Filtrar Pressupostos</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:1rem;">
+        <div>
+          <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Modelo</div>
+          <select id="select-pressuposto-modelo" class="model-select">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-family:var(--font-inst);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ufsb-cinza-medio);margin-bottom:4px;">Status</div>
+          <select id="select-pressuposto-status" class="model-select">
+            <option value="">Todos</option>
+            <option value="OK">OK</option>
+            <option value="WARN">Atenção</option>
+            <option value="FAIL">Falha</option>
+          </select>
+        </div>
+        <button class="btn-reload" style="align-self:flex-end;" onclick="filtrarPressupostos()">Filtrar</button>
+      </div>
+      <div id="tabela-pressupostos"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+  </div><!-- /screen-pressupostos -->
+
+  <!-- ===== TAB 4: VARIÁVEIS EXÓGENAS ===== -->
+  <div class="screen" id="screen-contexto">
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">Precipitação Mensal</div>
+      <div style="position:relative;width:100%;height:260px;">
+        <canvas id="chartPrecipitacao"></canvas>
+      </div>
+    </div>
+
+    <div id="correlacao-info" class="info-box" style="margin-bottom:1rem;"></div>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">Correlação Chamados × Precipitação</div>
+      <div style="position:relative;width:100%;height:240px;">
+        <canvas id="chartCorrelacao"></canvas>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">Dados de Contexto Sazonal</div>
+      <div id="tabela-contexto"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">Matriz de Correlação Multivariada</div>
+      <div id="corr-matrix" style="overflow-x:auto;"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card" id="card-area-exogena">
+      <div class="card-title">Área sob Manutenção × Variáveis Exógenas</div>
+      <div style="position:relative;width:100%;height:240px;">
+        <canvas id="chart-area-exogena-canvas"></canvas>
+      </div>
+    </div>
+
+  </div><!-- /screen-contexto -->
+
+</div><!-- /app -->
+
+<footer class="app-footer">
+  Malha IA · PPG Biossistemas — UFSB · Módulo 2 — Previsão Temporal
+</footer>
+
+
+<script>
+/* =========================================================
+   CONSTANTES E ESTADO GLOBAL — Módulo 2
+========================================================= */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLQMA7D9sohZ-nqo-Z2ydVuBi-7igmEFPmhYy3gbOLMsawx78E-DyfnvecMSb-00om/exec';
+const USAR_JSON_ESTATICO = true;
+const MAPA_JSON_ABAS = {
+  'PREVISAO_TEMPORAL': 'previsao_temporal.json',
+  'PREVISAO_DETALHES': 'previsao_detalhes.json',
+  'PREVISAO_INCERTEZAS': 'previsao_incertezas.json',
+  'PREVISAO_DIAGNOSTICO': 'previsao_diagnostico.json',
+  'PREVISAO_RESIDUOS': 'previsao_residuos.json',
+  'PREVISAO_QQPLOT': 'previsao_qqplot.json',
+  'PREVISAO_VALIDACAO': 'previsao_validacao.json',
+  'PREVISAO_PRESSUPOSTOS': 'previsao_pressupostos.json',
+  'FILTROS_DISPONIVEIS': 'filtros_disponiveis.json',
+  'CONTEXTO_SAZONAL': 'contexto_sazonal.json',
+  'Área Manutenção': 'area_manutencao.json',
+  'Ãrea ManutenÃ§Ã£o': 'area_manutencao.json',
+  'PREVISAO_POR_CATEGORIA': 'previsao_por_categoria.json',
+  'PREVISAO_DIEBOLD_MARIANO': 'previsao_diebold_mariano.json',
+  'PREVISAO_CRPS_MULTICRITERIO': 'previsao_crps_multicriterio.json',
+  'PREVISAO_GRANGER': 'previsao_granger.json'
+};
+
+const MODEL_COLORS = {
+  'ARIMA':           '#8b3a00',
+  'SARIMAX-12':      '#b07000',
+  'SARIMAX-6':       '#e69900',
+  'Holt-Winters':    '#1a6e35',
+  'Prophet':         '#0055cc',
+  'UC':              '#0055cc',
+  'GradientBoosting':'#8b1a1a',
+  'LSTM_Forecast':   '#00897b',
+  'Theta':           '#6a1b9a',
+  'Ensemble':        '#c62828'
+};
+const MODEL_NAMES = Object.keys(MODEL_COLORS);
+
+let dadosPrevisao = [], dadosDetalhes = [], dadosIncertezas = [], dadosDiagnostico = [];
+let dadosResiduos = [], dadosQQ = [], dadosContexto = [], dadosCV = [], dadosPressupostos = [];
+let dadosFiltros = [], dadosAreaManutencao = [], dadosPorCategoria = [];
+let filtroSufixo = '', charts = {}, modelosVisiveis = null;
+let icModeloSelecionado = null, dadosGraficoPrevisao = null;
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+async function fetchAba(nomeAba) {
+  try {
+    const nomeBase = String(nomeAba || '').replace(/_[A-Z]+_.+$/, '');
+    const arquivoJson = MAPA_JSON_ABAS[nomeAba] || MAPA_JSON_ABAS[nomeBase];
+    if (USAR_JSON_ESTATICO && arquivoJson) {
+      const respJson = await fetch(`dados/${arquivoJson}`, { cache: 'no-store' });
+      if (respJson.ok) {
+        return await respJson.json();
+      }
+      registrarLog(`JSON local ausente para ${nomeAba}; usando Apps Script.`, 'warn');
+    }
+    const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(nomeAba)}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    if (data.error) {
+      registrarLog(`Aba ${nomeAba}: ${data.error}`, 'warn');
+      return [];
+    }
+    return data;
+  } catch (e) {
+    registrarLog(`Falha ao acessar ${nomeAba}: ${e.message}`, 'err');
+    return [];
+  }
+}
+
+function registrarLog(msg, tipo = 'info') {
+  const area = document.getElementById('log-area');
+  if (!area) return;
+  const ts = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Bahia' });
+  const div = document.createElement('div');
+  div.className = 'log-line log-' + tipo;
+  div.textContent = `[${ts}] ${msg}`;
+  area.prepend(div);
+  if (area.children.length > 200) area.removeChild(area.lastChild);
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function parseNum(v) {
+  if (v === null || v === undefined || v === '') return null;
+  if (typeof v === 'number') return v;
+  const s = String(v).replace('%', '').replace(',', '.').trim();
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+function formatarMesAno(input) {
+  if (!input) return '';
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const s = String(input).trim();
+  if (/^[a-z]{3}\/\d{4}$/i.test(s)) return s.toLowerCase();
+  let m = s.match(/^(\d{1,2})\/(\d{4})$/);
+  if (m) { const mi = parseInt(m[1], 10); return (meses[mi-1] || m[1]) + '/' + m[2]; }
+  m = s.match(/^(\d{4})-(\d{2})/);
+  if (m) { const mi = parseInt(m[2], 10); return (meses[mi-1] || m[2]) + '/' + m[1]; }
+  m = s.match(/^\d{1,2}\/(\d{1,2})\/(\d{4})$/);
+  if (m) { const mi = parseInt(m[1], 10); return (meses[mi-1] || m[1]) + '/' + m[2]; }
+  if (!isNaN(parseFloat(s))) {
+    try {
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) return meses[d.getMonth()] + '/' + d.getFullYear();
+    } catch(e) {}
+  }
+  return s;
+}
+
+/* =========================================================
+   CLASSIFICAR STATUS (badge verde/amarelo/vermelho)
+========================================================= */
+function classificarStatus(txt) {
+  if (!txt) return 'badge-warn';
+  const t = txt.toString().toLowerCase().trim();
+  if (/^\s*(falhou|falha\b|✗|reprovad|n[ãa]o atendid)/i.test(t)) return 'badge-err';
+  if (/^\s*(ok\b|✓|aprovad|atendid)/i.test(t)) return 'badge-ok';
+  if (/^\s*(aten[cç][ãa]o|⚠|margin)/i.test(t)) return 'badge-warn';
+  if (/n[ãa]o[\s-]+(estacion|normal|ru[ií]do[\s-]+branco|homoced|signif|conform|adequad|v[áa]lid|aceit)/i.test(t)) {
+    return 'badge-err';
+  }
+  if (/(autocorrela[cç]|heteroced|heterosc|viola[cç]|multicolinearidade[\s-]+sever|multicolinearidade[\s-]+alta|outliers?[\s-]+influent|pontos?[\s-]+influent|mal[\s-]+especif|invalid|inv[áa]lid|inadequad|fora[\s-]+do[\s-]+(intervalo|limite))/i.test(t)) {
+    return 'badge-err';
+  }
+  if (/(estacion[áa]ri|ru[ií]do[\s-]+branco|normalidade[\s-]+aceit|distribu.{1,15}normal|homoced|sem[\s-]+autocorr|sem[\s-]+outlier|sem[\s-]+(multicolin|influent)|bem[\s-]+especif|v[áa]lid|adequad|conform|dentro[\s-]+do[\s-]+(intervalo|limite)|aceita[\s-]+h0)/i.test(t)) {
+    return 'badge-ok';
+  }
+  if (/(margin|fronteir|borderline|pr[óo]xim|incerto|parcial|lim[íi]trof)/i.test(t)) {
+    return 'badge-warn';
+  }
+  return 'badge-warn';
+}
+
+/* =========================================================
+   PROCESSAMENTO — PREVISÃO TEMPORAL
+========================================================= */
+function processarPrevisao() {
+  const elInfo = document.getElementById('prev-info');
+  const elMet = document.getElementById('metricas-prev');
+  const elCV = document.getElementById('metricas-cv');
+  const elDet = document.getElementById('detalhes-modelos');
+  const elInc = document.getElementById('incertezas-bootstrap');
+  const elDiag = document.getElementById('diagnostico-residuos');
+  const togglesDiv = document.getElementById('model-toggles');
+
+  if (!dadosPrevisao.length) {
+    if (elInfo) elInfo.innerHTML = '<span class="badge badge-warn">Aba PREVISAO_TEMPORAL vazia ou indisponível</span>';
+    return;
+  }
+
+  const cabecalho = dadosPrevisao[0] || [];
+  const idxVencCol = cabecalho.findIndex(h => (h || '').toString().trim().startsWith('Vencedor'));
+  let rmseHoldoutHeader = '';
+  if (idxVencCol >= 0) {
+    const hm = cabecalho[idxVencCol].toString().match(/=\s*([\d.,]+)/);
+    if (hm) rmseHoldoutHeader = hm[1];
+  }
+  const modeloCols = [];
+  const limitCol = idxVencCol >= 0 ? idxVencCol : cabecalho.length - 1;
+  for (let i = 2; i < limitCol; i++) {
+    const nome = cabecalho[i]?.toString().trim();
+    if (nome && MODEL_NAMES.includes(nome)) {
+      modeloCols.push({ idx: i, nome: nome });
+    }
+  }
+
+  const periodos = [], reais = [], forecasts = {};
+  modeloCols.forEach(m => { forecasts[m.nome] = []; });
+  let modeloVencedorRMSE = '';
+  let modeloVencedorMulti = '';
+  let secao = 'historico';
+  const metricasArr = [];
+  let idxFimInsample = -1;
+  let idxFimBacktest = -1;
+
+  for (let i = 1; i < dadosPrevisao.length; i++) {
+    const linha = dadosPrevisao[i];
+    if (!linha || linha.every(c => !c || c.toString().trim() === '')) {
+      if (secao === 'historico') secao = 'metricas';
+      continue;
+    }
+    const primeiro = linha[0]?.toString().trim();
+    if (!primeiro) continue;
+    if (secao === 'historico') {
+      const upper = primeiro.toUpperCase();
+      if (upper.includes('MÉTRICAS') || upper.includes('METRICAS') || upper.includes('VALIDAÇÃO') || upper.startsWith('MODELO')) {
+        secao = 'metricas';
+        metricasArr.push(linha);
+        continue;
+      }
+      const rowIdx = periodos.length;
+      periodos.push(formatarMesAno(primeiro));
+      reais.push(parseNum(linha[1]));
+      modeloCols.forEach(m => forecasts[m.nome].push(parseNum(linha[m.idx])));
+
+      const vencCell = (idxVencCol >= 0 ? linha[idxVencCol] : linha[linha.length - 1] || '').toString().trim();
+      if (vencCell === 'In-sample') {
+        idxFimInsample = rowIdx;
+      } else if (vencCell.includes('Backtest')) {
+        idxFimBacktest = rowIdx;
+      } else if (vencCell && !modeloVencedorRMSE) {
+        if (vencCell.includes(' / ')) {
+          const parts = vencCell.split(' / ');
+          const rmseM = parts[0].match(/^(.+?)\s*\(RMSE\)$/);
+          const multiM = parts[1] ? parts[1].match(/^(.+?)\s*\(multicrit\.?\)$/) : null;
+          if (rmseM) modeloVencedorRMSE = rmseM[1].trim();
+          if (multiM) modeloVencedorMulti = multiM[1].trim();
+        } else if (MODEL_NAMES.includes(vencCell)) {
+          modeloVencedorRMSE = vencCell;
+          modeloVencedorMulti = vencCell;
+        }
+      }
+    } else {
+      metricasArr.push(linha);
+    }
+  }
+
+  if (!modeloVencedorRMSE) {
+    for (let i = 1; i < dadosPrevisao.length; i++) {
+      const linha = dadosPrevisao[i];
+      if (!linha) continue;
+      const v = (linha[linha.length - 1] || '').toString().trim();
+      if (MODEL_NAMES.includes(v)) { modeloVencedorRMSE = v; modeloVencedorMulti = v; break; }
+    }
+  }
+  const modeloVencedor = modeloVencedorRMSE;
+
+  const bandasPorModelo = {};
+  if (dadosIncertezas.length > 1) {
+    const cabInc = dadosIncertezas[0] || [];
+    const idxModelo = cabInc.findIndex(h => h && h.toString().trim() === 'Modelo');
+    const idxPeriodo = cabInc.findIndex(h => h && h.toString().trim() === 'Período');
+    const idxIC2inf = cabInc.findIndex(h => h && h.toString().trim() === 'IC 2σ Inf');
+    const idxIC2sup = cabInc.findIndex(h => h && h.toString().trim() === 'IC 2σ Sup');
+    if (idxModelo >= 0 && idxPeriodo >= 0 && idxIC2inf >= 0 && idxIC2sup >= 0) {
+      for (let i = 1; i < dadosIncertezas.length; i++) {
+        const linha = dadosIncertezas[i];
+        if (!linha || !linha[idxModelo]) continue;
+        const modelo = linha[idxModelo]?.toString().trim();
+        if (!MODEL_NAMES.includes(modelo)) continue;
+        const periodo = formatarMesAno(linha[idxPeriodo]);
+        const inf = parseNum(linha[idxIC2inf]);
+        const sup = parseNum(linha[idxIC2sup]);
+        if (!bandasPorModelo[modelo]) bandasPorModelo[modelo] = { labels: [], inf: [], sup: [] };
+        bandasPorModelo[modelo].labels.push(periodo);
+        bandasPorModelo[modelo].inf.push(inf);
+        bandasPorModelo[modelo].sup.push(sup);
+      }
+    }
+  }
+
+  dadosGraficoPrevisao = { labels: periodos, reais, forecasts, modeloCols, bandasPorModelo, modeloVencedor, modeloVencedorRMSE, modeloVencedorMulti, idxFimInsample, idxFimBacktest, rmseHoldoutHeader };
+
+  let togglesHTML = '<span style="margin-right:10px;">Exibir modelos:</span>';
+  modeloCols.forEach(m => {
+    const padrao = (m.nome === 'Ensemble' || m.nome === modeloVencedor);
+    const ativo  = modelosVisiveis ? modelosVisiveis.has(m.nome) : padrao;
+    togglesHTML += `<label><input type="checkbox" class="model-check" data-modelo="${m.nome}" ${ativo ? 'checked' : ''} onchange="atualizarGraficoPrevisao()"> ${m.nome}</label>`;
+  });
+  const modelosComBanda = Object.keys(bandasPorModelo);
+  const icDefault = modeloVencedor;
+  const icSel = (icModeloSelecionado !== null && modelosComBanda.includes(icModeloSelecionado))
+    ? icModeloSelecionado : icDefault;
+  const icOpts = '<option value="">IC 95% — nenhum</option>' +
+    modelosComBanda.map(m => `<option value="${m}" ${m === icSel ? 'selected' : ''}>${m}</option>`).join('');
+  togglesHTML += `<span style="margin-left:14px;opacity:0.65;font-size:10px;">IC:</span>
+    <select class="model-select" id="ic-model-select" style="margin-left:4px;" onchange="atualizarGraficoPrevisao()">${icOpts}</select>`;
+  togglesDiv.innerHTML = togglesHTML;
+
+  const selRangeIni = document.getElementById('range-inicio');
+  const selRangeFim = document.getElementById('range-fim');
+  if (selRangeIni && selRangeFim) {
+    const opts = periodos.map((p, i) => `<option value="${i}">${p}</option>`).join('');
+    selRangeIni.innerHTML = opts;
+    selRangeFim.innerHTML = opts;
+    selRangeFim.value = String(periodos.length - 1);
+  }
+
+  atualizarGraficoPrevisao();
+
+  if (elMet) {
+    const linhasHoldout = metricasArr.filter(l => l && l[0] && MODEL_NAMES.includes(l[0].toString().trim()));
+    const cabHoldout = metricasArr.find(l => l && l[0] && l[0].toString().toLowerCase().startsWith('modelo'));
+    if (cabHoldout && linhasHoldout.length) {
+      elMet.innerHTML = `<table class="tbl"><thead><tr>${cabHoldout.map(h => `<th class="${h !== cabHoldout[0] ? 'tbl-num' : ''}">${h||''}</th>`).join('')}</tr></thead><tbody>` +
+        linhasHoldout.map(l => `<tr>${l.map((c,i) => `<td class="${i>0?'tbl-num':''}">${c!=null?c:'—'}</td>`).join('')}</tr>`).join('') + `</tbody></table>`;
+    } else elMet.innerHTML = '<div class="empty-state">Métricas não disponíveis.</div>';
+  }
+
+  if (elCV) {
+    if (dadosCV && dadosCV.length > 1) {
+      const cabCV = dadosCV[0] || [];
+      const linhasCV = dadosCV.slice(1).filter(l => l && l[0] && l[0].toString().trim() !== '');
+      const linhasModelo = linhasCV.filter(l => {
+        const primeiro = l[0].toString().trim();
+        return primeiro && !primeiro.toLowerCase().includes('validação') && !primeiro.toLowerCase().includes('compara');
+      });
+      if (cabCV.length && linhasModelo.length) {
+        elCV.innerHTML = `<table class="tbl"><thead><tr>${cabCV.map(h => `<th class="${h !== cabCV[0] ? 'tbl-num' : ''}">${h||''}</th>`).join('')}</tr></thead><tbody>` +
+          linhasModelo.map(l => `<tr>${l.map((c,i) => `<td class="${i>0?'tbl-num':''}">${c!=null?c:'—'}</td>`).join('')}</tr>`).join('') + `</tbody></table>`;
+      } else {
+        elCV.innerHTML = '<div class="empty-state">Aba PREVISAO_VALIDACAO sem dados de modelo.</div>';
+      }
+    } else {
+      elCV.innerHTML = '<div class="empty-state">Aba PREVISAO_VALIDACAO vazia ou indisponível.</div>';
+    }
+  }
+
+  if (elInfo) {
+    const ptsHist = reais.filter(v => v !== null).length;
+    const ptsForecast = periodos.length - ptsHist;
+    const nInsample = idxFimInsample >= 0 ? idxFimInsample + 1 : 0;
+    const nBacktest = idxFimBacktest >= 0 ? idxFimBacktest - Math.max(idxFimInsample, -1) : 0;
+    let winnerHTML = '';
+    if (!modeloVencedorMulti || modeloVencedorRMSE === modeloVencedorMulti) {
+      winnerHTML = `<strong style="color:var(--ufsb-azul);">Vencedor: ${modeloVencedorRMSE || '—'}</strong>`;
+    } else {
+      winnerHTML = `<strong style="color:var(--ufsb-azul);">RMSE: ${modeloVencedorRMSE}</strong> · <strong style="color:var(--ufsb-azul-medio);">Multicritério: ${modeloVencedorMulti}</strong>`;
+    }
+    const rmseInfo = rmseHoldoutHeader ? ` (holdout RMSE = ${rmseHoldoutHeader})` : '';
+    const regioes = [
+      nInsample > 0 ? `${nInsample} in-sample` : '',
+      nBacktest > 0 ? `${nBacktest} backtest` : '',
+      ptsForecast > 0 ? `${ptsForecast} forecast` : ''
+    ].filter(Boolean).join(' · ');
+    elInfo.innerHTML = `<span>${winnerHTML}${rmseInfo} · ${regioes || ptsHist + ' histórico'}</span>`;
+    const rmseNum = rmseHoldoutHeader ? parseFloat(rmseHoldoutHeader.replace(',','.')) : NaN;
+    const valoresHist = reais.filter(v => v !== null && v > 0);
+    const mediaHist = valoresHist.length
+      ? valoresHist.reduce((s, x) => s + x, 0) / valoresHist.length
+      : null;
+    atualizarSemaforo(rmseNum, mediaHist);
+  }
+
+  renderizarIncertezasComTipo();
+
+  if (elDet && dadosDetalhes.length) {
+    const cab = dadosDetalhes[0] || [];
+    const linhas = dadosDetalhes.slice(1).filter(l => l && (l[0] || l[1]));
+    elDet.innerHTML = `<table class="tbl"><thead><tr>${cab.map(h => `<th>${h||''}</th>`).join('')}</tr></thead><tbody>` +
+      linhas.map(l => `<tr>${l.map(c => `<td>${c!=null?c:''}</td>`).join('')}</tr>`).join('') + `</tbody></table>`;
+  } else if (elDet) elDet.innerHTML = '<div class="empty-state">Detalhes não disponíveis.</div>';
+
+  if (elInc && !dadosIncertezas.length) {
+    elInc.innerHTML = '<div class="empty-state">Incertezas não disponíveis.</div>';
+  }
+
+  if (elDiag && dadosDiagnostico.length) {
+    const cab = dadosDiagnostico[0] || [];
+    const linhas = dadosDiagnostico.slice(1).filter(l => l && l[0]);
+    const interpIdxs = cab.reduce((acc, h, i) => {
+      if ((h || '').toString().trim().toLowerCase().includes('interpreta')) acc.push(i);
+      return acc;
+    }, []);
+    elDiag.innerHTML = `<table class="tbl"><thead><tr>${cab.map(h => `<th>${h || ''}</th>`).join('')}</tr></thead><tbody>` +
+      linhas.map(l => `<tr>${l.map((c, i) => {
+        if (interpIdxs.includes(i) && c) {
+          const txt = c.toString().trim();
+          const cls = classificarStatus(txt);
+          return `<td><span class="badge ${cls}">${txt}</span></td>`;
+        }
+        return `<td>${c != null ? c : ''}</td>`;
+      }).join('')}</tr>`).join('') + `</tbody></table>`;
+  } else if (elDiag) elDiag.innerHTML = '<div class="empty-state">Diagnóstico não disponível.</div>';
+}
+
+/* =========================================================
+   RESET DE PERÍODO
+========================================================= */
+function resetRangePrevisao() {
+  if (!dadosGraficoPrevisao) return;
+  const n = dadosGraficoPrevisao.labels.length;
+  const si = document.getElementById('range-inicio');
+  const sf = document.getElementById('range-fim');
+  if (si) si.value = '0';
+  if (sf) sf.value = String(n - 1);
+  atualizarGraficoPrevisao();
+}
+
+/* =========================================================
+   GRÁFICO PRINCIPAL DE PREVISÃO
+========================================================= */
+function atualizarGraficoPrevisao() {
+  if (!dadosGraficoPrevisao) return;
+  const { labels: allLabels, reais: allReais, forecasts: allForecasts, modeloCols,
+          bandasPorModelo, modeloVencedor,
+          idxFimInsample: _iFI, idxFimBacktest: _iFB } = dadosGraficoPrevisao;
+
+  const selIni = document.getElementById('range-inicio');
+  const selFim = document.getElementById('range-fim');
+  const startIdx = selIni ? Math.max(0, parseInt(selIni.value) || 0) : 0;
+  const endIdx   = selFim ? Math.min(allLabels.length - 1, parseInt(selFim.value) ?? allLabels.length - 1) : allLabels.length - 1;
+
+  const labels  = allLabels.slice(startIdx, endIdx + 1);
+  const reais   = allReais.slice(startIdx, endIdx + 1);
+  const forecasts = {};
+  modeloCols.forEach(m => { forecasts[m.nome] = allForecasts[m.nome].slice(startIdx, endIdx + 1); });
+
+  const toRel = (abs) => abs < startIdx ? -1 : abs > endIdx ? labels.length : abs - startIdx;
+  const idxFimInsample = toRel(_iFI);
+  const idxFimBacktest = toRel(_iFB);
+
+  const letivoMap = {}, precipMap = {};
+  if (dadosContexto.length > 1) {
+    const cabCtx = dadosContexto[0] || [];
+    const idxPrecCtx = cabCtx.findIndex(h => h && h.toString().toLowerCase().includes('precipitacao'));
+    const idxLetCtx  = cabCtx.findIndex(h => h && h.toString().toLowerCase().includes('letivo'));
+    dadosContexto.slice(1).forEach(l => {
+      if (!l || !l[0]) return;
+      const lbl = formatarMesAno(l[0]);
+      if (idxLetCtx  >= 0) { const v = (l[idxLetCtx]||'').toString().trim().toLowerCase(); letivoMap[lbl] = (v==='sim'||v==='1'||v==='true'); }
+      if (idxPrecCtx >= 0) { const p = parseNum(l[idxPrecCtx]); if (p !== null) precipMap[lbl] = p; }
+    });
+  }
+  const mostrarPrecip  = document.getElementById('toggle-precip')?.checked ?? true;
+  const precipData     = labels.map(lbl => mostrarPrecip ? (precipMap[lbl] ?? NaN) : NaN);
+  const letivoFlags    = labels.map(lbl => letivoMap[lbl] || false);
+  const temPrecip      = mostrarPrecip && precipData.some(v => !isNaN(v));
+
+  const regionPlugin = {
+    id: 'regionBg',
+    beforeDraw(chart) {
+      const { ctx, chartArea } = chart;
+      const meta0 = chart.getDatasetMeta(0);
+      if (!meta0 || !meta0.data.length) return;
+      const getX = (idx) => {
+        const cl = Math.max(0, Math.min(idx, meta0.data.length - 1));
+        return meta0.data[cl] ? meta0.data[cl].x : null;
+      };
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(chartArea.left, chartArea.top, chartArea.width, chartArea.height);
+      ctx.clip();
+
+      labels.forEach((lbl, i) => {
+        if (!letivoFlags[i]) return;
+        const x0 = getX(i);
+        const x1 = i + 1 < labels.length ? getX(i + 1) : chartArea.right;
+        if (x0 == null) return;
+        ctx.fillStyle = 'rgba(26,110,53,0.07)';
+        ctx.fillRect(x0, chartArea.top, (x1 ?? chartArea.right) - x0, chartArea.height);
+      });
+
+      if (idxFimInsample >= 0 && idxFimInsample < labels.length) {
+        const x1 = getX(idxFimInsample);
+        if (x1) { ctx.fillStyle = 'rgba(0,40,120,0.04)'; ctx.fillRect(chartArea.left, chartArea.top, x1 - chartArea.left, chartArea.height); }
+      }
+      if (idxFimBacktest >= 0 && idxFimBacktest < labels.length) {
+        const x0 = (idxFimInsample >= 0 && idxFimInsample < labels.length) ? (getX(idxFimInsample) || chartArea.left) : chartArea.left;
+        const x1 = getX(idxFimBacktest);
+        if (x1) { ctx.fillStyle = 'rgba(176,112,0,0.06)'; ctx.fillRect(x0, chartArea.top, x1 - x0, chartArea.height); }
+      }
+      const xFc = (idxFimBacktest >= 0 && idxFimBacktest < labels.length)
+        ? getX(idxFimBacktest)
+        : ((idxFimInsample >= 0 && idxFimInsample < labels.length) ? getX(idxFimInsample) : null);
+      if (xFc) { ctx.fillStyle = 'rgba(26,110,53,0.04)'; ctx.fillRect(xFc, chartArea.top, chartArea.right - xFc, chartArea.height); }
+
+      ctx.strokeStyle = 'rgba(0,40,120,0.22)';
+      ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+      [idxFimInsample, idxFimBacktest].forEach(idx => {
+        if (idx < 0 || idx >= labels.length) return;
+        const xv = getX(idx);
+        if (xv) { ctx.beginPath(); ctx.moveTo(xv, chartArea.top); ctx.lineTo(xv, chartArea.bottom); ctx.stroke(); }
+      });
+      ctx.restore();
+    }
+  };
+
+  const checkboxes = document.querySelectorAll('.model-check');
+  const ativos     = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.dataset.modelo);
+  const icModeloSel = document.getElementById('ic-model-select')?.value || modeloVencedor || '';
+  modelosVisiveis = new Set(ativos);
+  icModeloSelecionado = icModeloSel || '';
+
+  const datasets = [];
+
+  datasets.push({
+    label: 'Histórico real',
+    data: reais, borderColor: '#1a237e', backgroundColor: '#1a237e',
+    borderWidth: 2.5, pointRadius: 2.5, pointHoverRadius: 4,
+    fill: false, spanGaps: false, order: 1, yAxisID: 'y'
+  });
+
+  modeloCols.forEach(m => {
+    if (!ativos.includes(m.nome)) return;
+    const cor = MODEL_COLORS[m.nome] || '#888';
+    const isEnsemble = m.nome === 'Ensemble';
+    datasets.push({
+      label: m.nome, data: forecasts[m.nome],
+      borderColor: cor, backgroundColor: cor,
+      borderWidth: isEnsemble ? 2.5 : 1.8,
+      borderDash: isEnsemble ? [] : [5, 4],
+      pointRadius: 0, pointHoverRadius: 3,
+      fill: false, spanGaps: false,
+      order: isEnsemble ? 2 : 3, yAxisID: 'y'
+    });
+  });
+
+  if (icModeloSel && bandasPorModelo[icModeloSel]) {
+    const banda  = bandasPorModelo[icModeloSel];
+    const infData = new Array(labels.length).fill(NaN);
+    const supData = new Array(labels.length).fill(NaN);
+    banda.labels.forEach((lbl, idx) => {
+      const pos = labels.indexOf(lbl);
+      if (pos >= 0) { infData[pos] = banda.inf[idx]; supData[pos] = banda.sup[idx]; }
+    });
+    const hex  = (MODEL_COLORS[icModeloSel] || '#888888').replace('#','');
+    const rr = parseInt(hex.substring(0,2),16), gg = parseInt(hex.substring(2,4),16), bb = parseInt(hex.substring(4,6),16);
+    const corB = `rgba(${rr},${gg},${bb},0.45)`, corF = `rgba(${rr},${gg},${bb},0.10)`;
+    datasets.push({ label: 'IC inf', data: infData, borderColor: corB, borderWidth: 1.2, borderDash: [3,3], pointRadius: 0, fill: false, order: 10, yAxisID: 'y' });
+    datasets.push({ label: `IC 95% (${icModeloSel})`, data: supData, borderColor: corB, borderWidth: 1.2, borderDash: [3,3], pointRadius: 0, fill: { target: '-1', above: corF, below: corF }, order: 10, yAxisID: 'y' });
+  }
+
+  if (temPrecip) {
+    datasets.push({
+      type: 'bar', label: 'Precipitação (mm)', data: precipData,
+      backgroundColor: 'rgba(30,136,229,0.22)', borderColor: 'rgba(30,136,229,0.45)',
+      borderWidth: 0.5, yAxisID: 'y1', order: 99, pointRadius: 0
+    });
+  }
+
+  const ctx = document.getElementById('chartPrevisao');
+  if (charts.previsao) charts.previsao.destroy();
+  charts.previsao = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    plugins: [regionPlugin],
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index', intersect: false,
+          filter: item => item.dataset.label !== 'IC inf'
+        },
+        zoom: {
+          pan:  { enabled: true, mode: 'x' },
+          zoom: { wheel: { enabled: true, speed: 0.1 }, pinch: { enabled: true }, mode: 'x' }
+        }
+      },
+      scales: {
+        x:  { ticks: { font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 20 }, grid: { color: 'rgba(0,40,120,0.06)' } },
+        y:  { beginAtZero: true, ticks: { font: { size: 10 } }, grid: { color: 'rgba(0,40,120,0.06)' }, title: { display: true, text: 'Chamados/mês', font: { size: 10 } } },
+        y1: { display: temPrecip, position: 'right', beginAtZero: true,
+              grid: { drawOnChartArea: false },
+              ticks: { font: { size: 9 }, color: 'rgba(30,136,229,0.8)' },
+              title: { display: true, text: 'Precip. (mm)', color: 'rgba(30,136,229,0.8)', font: { size: 9 } } }
+      }
+    }
+  });
+
+  const lh = ['<span><span class="leg-dot" style="background:#1a237e"></span>Histórico real</span>'];
+  modeloCols.forEach(m => {
+    if (!ativos.includes(m.nome)) return;
+    lh.push(`<span><span class="leg-dot" style="background:${MODEL_COLORS[m.nome]||'#888'}"></span>${m.nome}</span>`);
+  });
+  if (icModeloSel && bandasPorModelo[icModeloSel]) {
+    const corIC = MODEL_COLORS[icModeloSel] || '#888';
+    lh.push(`<span><span class="leg-dot" style="background:${corIC};opacity:0.35;border:1px dashed ${corIC}"></span>IC 95% (${icModeloSel})</span>`);
+  }
+  if (temPrecip)         lh.push('<span><span class="leg-dot" style="background:rgba(30,136,229,0.45)"></span>Precipitação (mm)</span>');
+  if (letivoFlags.some(Boolean)) lh.push('<span><span class="leg-dot" style="background:rgba(26,110,53,0.25);border:1px solid rgba(26,110,53,0.5)"></span>Período letivo</span>');
+  if (idxFimInsample >= 0 && idxFimInsample < labels.length) lh.push('<span><span class="leg-dot" style="background:rgba(0,40,120,0.12);border:1px solid rgba(0,40,120,0.3)"></span>In-sample</span>');
+  if (idxFimBacktest >= 0 && idxFimBacktest < labels.length) lh.push('<span><span class="leg-dot" style="background:rgba(176,112,0,0.18);border:1px solid rgba(176,112,0,0.4)"></span>Backtest</span>');
+  if (labels.length > 0 && (_iFB < endIdx)) lh.push('<span><span class="leg-dot" style="background:rgba(26,110,53,0.15);border:1px solid rgba(26,110,53,0.4)"></span>Forecast</span>');
+  document.getElementById('legend-previsao').innerHTML = lh.join('');
+}
+
+/* =========================================================
+   RESÍDUOS — boxplot, histograma, Q-Q
+========================================================= */
+function processarResiduos() {
+  const select = document.getElementById('select-modelo-residuo');
+  if (!select) return;
+  if (!dadosResiduos.length || dadosResiduos.length < 2) {
+    select.innerHTML = '<option>—</option>';
+    document.getElementById('residuo-stats').innerHTML = '<em>Aba PREVISAO_RESIDUOS vazia. O motor preenche esta aba a cada execução do Eixo 2.</em>';
+    return;
+  }
+  const cab = dadosResiduos[0] || [];
+  const idxModelo = cab.findIndex(h => h && h.toString().trim() === 'Modelo');
+  const idxResiduo = cab.findIndex(h => h && h.toString().trim() === 'Residuo');
+  if (idxModelo < 0 || idxResiduo < 0) {
+    select.innerHTML = '<option>Formato não reconhecido</option>';
+    return;
+  }
+  const modelosDisponiveis = new Set();
+  for (let i = 1; i < dadosResiduos.length; i++) {
+    const m = dadosResiduos[i]?.[idxModelo]?.toString().trim();
+    if (m) modelosDisponiveis.add(m);
+  }
+  const lista = Array.from(modelosDisponiveis);
+  if (!lista.length) { select.innerHTML = '<option>—</option>'; return; }
+  select.innerHTML = lista.map(m => `<option value="${m}">${m}</option>`).join('');
+  renderGraficosResiduos();
+}
+
+function renderGraficosResiduos() {
+  const select = document.getElementById('select-modelo-residuo');
+  const modelo = select?.value;
+  if (!modelo || !dadosResiduos.length) return;
+
+  const cab = dadosResiduos[0] || [];
+  const idxModelo = cab.findIndex(h => h && h.toString().trim() === 'Modelo');
+  const idxResiduo = cab.findIndex(h => h && h.toString().trim() === 'Residuo');
+  if (idxModelo < 0 || idxResiduo < 0) return;
+
+  const residuos = [];
+  for (let i = 1; i < dadosResiduos.length; i++) {
+    const linha = dadosResiduos[i];
+    if (!linha) continue;
+    if (linha[idxModelo]?.toString().trim() !== modelo) continue;
+    const v = parseNum(linha[idxResiduo]);
+    if (v !== null) residuos.push(v);
+  }
+
+  if (!residuos.length) {
+    document.getElementById('residuo-stats').innerHTML = '<em>Sem resíduos disponíveis para este modelo.</em>';
+    return;
+  }
+
+  const n = residuos.length;
+  const media = residuos.reduce((a,b) => a+b, 0) / n;
+  const variancia = residuos.reduce((a,b) => a + (b-media)**2, 0) / (n-1);
+  const desvio = Math.sqrt(variancia);
+  const sorted = [...residuos].sort((a,b) => a-b);
+  const med = n % 2 === 0 ? (sorted[n/2-1]+sorted[n/2])/2 : sorted[Math.floor(n/2)];
+  const min = sorted[0];
+  const max = sorted[n-1];
+
+  document.getElementById('residuo-stats').innerHTML =
+    `<strong>${modelo}</strong> · n=${n} · média=${media.toFixed(3)} · desvio=${desvio.toFixed(3)} · mediana=${med.toFixed(3)} · mín=${min.toFixed(2)} · máx=${max.toFixed(2)}`;
+
+  const ctxBox = document.getElementById('chartBoxplot');
+  if (charts.box) charts.box.destroy();
+  charts.box = new Chart(ctxBox, {
+    type: 'boxplot',
+    data: {
+      labels: [modelo],
+      datasets: [{
+        label: 'Resíduos',
+        data: [residuos],
+        backgroundColor: 'rgba(0,40,120,0.18)',
+        borderColor: '#002878',
+        borderWidth: 1.5,
+        outlierBackgroundColor: '#8b1a1a',
+        outlierRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { title: { display: true, text: 'Resíduo' } } }
+    }
+  });
+
+  const ctxHist = document.getElementById('chartHistograma');
+  if (charts.hist) charts.hist.destroy();
+  const nBins = Math.max(8, Math.ceil(Math.sqrt(n)));
+  const binWidth = (max - min) / nBins;
+  const bins = new Array(nBins).fill(0);
+  const labels = [];
+  const centros = [];
+  for (let i = 0; i < nBins; i++) {
+    const a = min + i*binWidth;
+    const b = a + binWidth;
+    const c = (a + b) / 2;
+    centros.push(c);
+    labels.push(c.toFixed(1));
+  }
+  residuos.forEach(v => {
+    let idx = Math.floor((v - min) / binWidth);
+    if (idx >= nBins) idx = nBins - 1;
+    if (idx < 0) idx = 0;
+    bins[idx]++;
+  });
+  const normalCount = centros.map(x => {
+    if (desvio === 0) return 0;
+    const z = (x - media) / desvio;
+    const pdf = (1 / (desvio * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * z * z);
+    return binWidth * n * pdf;
+  });
+  charts.hist = new Chart(ctxHist, {
+    data: {
+      labels,
+      datasets: [
+        { type: 'bar', label: 'Frequência observada', data: bins, backgroundColor: 'rgba(0,40,120,0.6)', borderColor: '#002878', borderWidth: 1, order: 2 },
+        { type: 'line', label: 'Normal teórica N(μ̂, σ̂)', data: normalCount, borderColor: '#8b1a1a', backgroundColor: 'rgba(139,26,26,0.08)', borderWidth: 2, pointRadius: 0, tension: 0.35, fill: false, order: 1 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { font: { size: 10 }, boxWidth: 12 } },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Resíduo' }, ticks: { font: { size: 9 }, maxRotation: 45 } },
+        y: { beginAtZero: true, title: { display: true, text: 'Frequência' } }
+      }
+    }
+  });
+
+  renderQQ(modelo, residuos, desvio, media);
+}
+
+function renderQQ(modelo, residuos, desvio, media) {
+  const ctxQQ = document.getElementById('chartQQ');
+  if (charts.qq) charts.qq.destroy();
+
+  let pontos = [];
+
+  if (dadosQQ.length > 1) {
+    const cab = dadosQQ[0] || [];
+    const idxModelo = cab.findIndex(h => h && h.toString().trim() === 'Modelo');
+    const idxTeo = cab.findIndex(h => h && h.toString().trim() === 'Quantil_Teorico');
+    const idxObs = cab.findIndex(h => h && h.toString().trim() === 'Quantil_Observado_Padronizado');
+    if (idxModelo >= 0 && idxTeo >= 0 && idxObs >= 0) {
+      for (let i = 1; i < dadosQQ.length; i++) {
+        const linha = dadosQQ[i];
+        if (!linha || linha[idxModelo]?.toString().trim() !== modelo) continue;
+        const t = parseNum(linha[idxTeo]);
+        const o = parseNum(linha[idxObs]);
+        if (t !== null && o !== null) pontos.push({ x: t, y: o });
+      }
+    }
+  }
+
+  if (!pontos.length) {
+    const sorted = [...residuos].sort((a,b) => a-b);
+    const n = sorted.length;
+    pontos = sorted.map((r, i) => {
+      const p = (i + 0.5) / n;
+      return { x: invNormal(p), y: (r - media) / desvio };
+    });
+  }
+
+  const xs = pontos.map(p => p.x);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const linhaRef = [{ x: minX, y: minX }, { x: maxX, y: maxX }];
+
+  charts.qq = new Chart(ctxQQ, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label: 'Q-Q', data: pontos, backgroundColor: '#002878', pointRadius: 3 },
+        { label: 'y=x', data: linhaRef, type: 'line', borderColor: '#8b1a1a', borderDash: [5,5], borderWidth: 1.5, pointRadius: 0, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { title: { display: true, text: 'Quantil teórico (N(0,1))' } },
+        y: { title: { display: true, text: 'Quantil observado padronizado' } }
+      }
+    }
+  });
+}
+
+function invNormal(p) {
+  if (p <= 0 || p >= 1) return 0;
+  const a = [-39.6968302866538, 220.946098424521, -275.928510446969, 138.357751867269, -30.6647980661472, 2.50662827745924];
+  const b = [-54.4760987982241, 161.585836858041, -155.698979859887, 66.8013118877197, -13.2806815528857];
+  const c = [-0.00778489400243029, -0.322396458041136, -2.40075827716184, -2.54973253934373, 4.37466414146497, 2.93816398269878];
+  const d = [0.00778469570904146, 0.32246712907004, 2.445134137143, 3.75440866190742];
+  const pLow = 0.02425, pHigh = 1 - pLow;
+  let q, r;
+  if (p < pLow) {
+    q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  } else if (p <= pHigh) {
+    q = p - 0.5; r = q*q;
+    return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+  } else {
+    q = Math.sqrt(-2 * Math.log(1-p));
+    return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+}
+
+/* =========================================================
+   CORRELAÇÃO DE PEARSON
+========================================================= */
+function pearsonCorr(xs, ys) {
+  const pairs = xs.map((x, i) => [x, ys[i]]).filter(([a, b]) => a != null && b != null && !isNaN(a) && !isNaN(b));
+  if (pairs.length < 4) return null;
+  const mx = pairs.reduce((s, p) => s + p[0], 0) / pairs.length;
+  const my = pairs.reduce((s, p) => s + p[1], 0) / pairs.length;
+  let num = 0, dx2 = 0, dy2 = 0;
+  pairs.forEach(([x, y]) => { num += (x - mx) * (y - my); dx2 += (x - mx) ** 2; dy2 += (y - my) ** 2; });
+  const denom = Math.sqrt(dx2 * dy2);
+  return denom === 0 ? null : num / denom;
+}
+
+function corrClass(r) {
+  if (r === null) return 'corr-na';
+  const a = Math.abs(r);
+  if (a >= 0.7) return r > 0 ? 'corr-pos-strong' : 'corr-neg-strong';
+  if (a >= 0.3) return r > 0 ? 'corr-pos-mid'    : 'corr-neg-mid';
+  return 'corr-pos-weak';
+}
+
+function renderCorrelacao() {
+  const el = document.getElementById('corr-matrix');
+  if (!el) return;
+  if (!dadosGraficoPrevisao || !dadosContexto.length) {
+    el.innerHTML = '<div class="empty-state">Aguardando dados de previsão e contexto...</div>';
+    return;
+  }
+
+  const { labels: allLabels, reais: allReais } = dadosGraficoPrevisao;
+  const cabCtx = dadosContexto[0] || [];
+  const idxPrecCtx = cabCtx.findIndex(h => h && h.toString().toLowerCase().includes('precipitacao'));
+  const idxLetCtx  = cabCtx.findIndex(h => h && h.toString().toLowerCase().includes('letivo'));
+
+  const precipByLabel = {}, letivoByLabel = {};
+  dadosContexto.slice(1).forEach(l => {
+    if (!l || !l[0]) return;
+    const lbl = formatarMesAno(l[0]);
+    if (idxPrecCtx >= 0) { const p = parseNum(l[idxPrecCtx]); if (p !== null) precipByLabel[lbl] = p; }
+    if (idxLetCtx  >= 0) { const v = (l[idxLetCtx] || '').toString().trim().toLowerCase(); letivoByLabel[lbl] = (v === 'sim' || v === '1' || v === 'true') ? 1 : 0; }
+  });
+
+  const chamados = [], precip = [], letivo = [], lag1 = [], lag6 = [], lag12 = [];
+  allLabels.forEach((lbl, i) => {
+    const c = allReais[i];
+    if (c == null || isNaN(c)) return;
+    chamados.push(c);
+    precip.push(precipByLabel[lbl] ?? NaN);
+    letivo.push(letivoByLabel[lbl] ?? NaN);
+    lag1.push( allReais[i - 1]  ?? NaN);
+    lag6.push( allReais[i - 6]  ?? NaN);
+    lag12.push(allReais[i - 12] ?? NaN);
+  });
+
+  if (chamados.length < 6) {
+    el.innerHTML = '<div class="empty-state">Pontos insuficientes para calcular correlações.</div>';
+    return;
+  }
+
+  const vars = [
+    { nome: 'Chamados', v: chamados },
+    { nome: 'Precip.',  v: precip   },
+    { nome: 'Letivo',   v: letivo   },
+    { nome: 'Lag-1',    v: lag1     },
+    { nome: 'Lag-6',    v: lag6     },
+    { nome: 'Lag-12',   v: lag12    }
+  ];
+
+  let html = '<div style="overflow-x:auto;"><table class="corr-tbl"><thead><tr><th></th>';
+  vars.forEach(v => { html += `<th>${v.nome}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  vars.forEach((vi, i) => {
+    html += `<tr><th style="text-align:left;">${vi.nome}</th>`;
+    vars.forEach((vj, j) => {
+      if (i === j) {
+        html += '<td class="corr-diag">1.00</td>';
+      } else {
+        const r = pearsonCorr(vi.v, vj.v);
+        const cls = corrClass(r);
+        const txt = r !== null ? r.toFixed(2) : '—';
+        html += `<td class="${cls}">${txt}</td>`;
+      }
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  html += `<div style="font-size:11px;color:var(--ufsb-cinza-medio);margin-top:8px;font-family:var(--font-inst);">n = ${chamados.length} meses. </div>`;
+  el.innerHTML = html;
+}
+
+/* =========================================================
+   PRESSUPOSTOS ESTATÍSTICOS
+========================================================= */
+function linhasPressupostosValidas(linhas) {
+  if (!linhas) return [];
+  const metadados = /^(refer|atualiz|nota|observ|legenda|fonte|gerad|vers[aã]o|interpreta[cç][aã]o\b|metodolog|sumar|resumo|tabela|figura|n[aã]o aplic|fim do)/i;
+  return linhas.filter(l => {
+    if (!l || !l[0]) return false;
+    const m = l[0].toString().trim();
+    if (!m) return false;
+    if (metadados.test(m)) return false;
+    const conteudoExtra = l.slice(1).filter(c => c !== null && c !== undefined && c.toString().trim() !== '').length;
+    if (conteudoExtra < 2) return false;
+    return MODEL_NAMES.includes(m) || /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ]/.test(m);
+  });
+}
+
+function processarPressupostos() {
+  const elTab = document.getElementById('tabela-pressupostos');
+  const elSel = document.getElementById('select-pressuposto-modelo');
+  if (!dadosPressupostos.length || dadosPressupostos.length < 2) {
+    if (elTab) elTab.innerHTML = '<div class="empty-state">Aba PREVISAO_PRESSUPOSTOS vazia ou indisponível. Execute o motor v4.0.0+ para gerar esta aba.</div>';
+    const elRank = document.getElementById('ranking-modelos-content');
+    if (elRank) elRank.innerHTML = '<div class="empty-state">Recomendação indisponível sem dados de pressupostos.</div>';
+    return;
+  }
+  const cab = dadosPressupostos[0] || [];
+  const linhas = linhasPressupostosValidas(dadosPressupostos.slice(1));
+  const modelos = [...new Set(linhas.map(l => (l[0] || '').toString().trim()).filter(Boolean))];
+  if (elSel) {
+    elSel.innerHTML = '<option value="">Todos</option>' + modelos.map(m => `<option value="${m}">${m}</option>`).join('');
+  }
+  renderTabelaPressupostos(cab, linhas, '', '');
+  renderModeloRecomendado(cab, linhas);
+}
+
+function calcularRankingModelos(cab, linhas) {
+  const idxRes = cab.findIndex(h => (h || '').toString().trim() === 'Resultado');
+  if (idxRes < 0) return [];
+
+  const stats = {};
+  linhas.forEach(l => {
+    const m = (l[0] || '').toString().trim();
+    if (!m) return;
+    if (!stats[m]) stats[m] = { ok: 0, aten: 0, falhou: 0, total: 0 };
+    const r = (l[idxRes] || '').toString().toLowerCase().trim();
+    stats[m].total++;
+    if (r.includes('ok') || r.includes('✓') || r.includes('atendid'))       stats[m].ok++;
+    else if (r.includes('aten') || r.includes('⚠') || r.includes('margin')) stats[m].aten++;
+    else if (r.includes('falh') || r.includes('✗') || r.includes('viol'))   stats[m].falhou++;
+  });
+
+  let nrmseGlobal = null;
+  if (dadosGraficoPrevisao) {
+    const reais = (dadosGraficoPrevisao.reais || []).filter(v => v !== null && v > 0);
+    const mediaHist = reais.length ? reais.reduce((s, x) => s + x, 0) / reais.length : null;
+    const rmseStr = dadosGraficoPrevisao.rmseHoldoutHeader;
+    const rmse = rmseStr ? parseFloat(rmseStr.replace(',', '.')) : NaN;
+    if (!isNaN(rmse) && mediaHist && mediaHist > 0) nrmseGlobal = rmse / mediaHist;
+  }
+
+  const lista = Object.entries(stats).map(([modelo, s]) => {
+    const propOK = s.total > 0 ? s.ok / s.total : 0;
+    const propFalha = s.total > 0 ? s.falhou / s.total : 0;
+    const scorePress = propOK - propFalha;
+    const ehVencedor = dadosGraficoPrevisao &&
+      (modelo === dadosGraficoPrevisao.modeloVencedorRMSE ||
+       modelo === dadosGraficoPrevisao.modeloVencedorMulti);
+    const scoreDesempenho = (nrmseGlobal !== null)
+      ? Math.max(0, 1 - nrmseGlobal) * (ehVencedor ? 1 : 0.85)
+      : (ehVencedor ? 0.7 : 0.5);
+    const score = 0.6 * scorePress + 0.4 * scoreDesempenho;
+    return { modelo, ...s, scorePress, scoreDesempenho, score, ehVencedor };
+  });
+
+  lista.sort((a, b) => b.score - a.score);
+  return lista;
+}
+
+function renderModeloRecomendado(cab, linhas) {
+  const el = document.getElementById('ranking-modelos-content');
+  if (!el) return;
+  const ranking = calcularRankingModelos(cab, linhas);
+  if (!ranking.length) {
+    el.innerHTML = '<div class="empty-state">Sem dados suficientes para recomendar modelo.</div>';
+    return;
+  }
+
+  const top3 = ranking.slice(0, 3);
+  const html = top3.map((r, i) => {
+    const medalha = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
+    const cor = i === 0 ? 'var(--ufsb-azul)' : i === 1 ? 'var(--ufsb-azul-medio)' : 'var(--ufsb-cinza-medio)';
+    const bg = i === 0 ? 'var(--ufsb-azul-claro)' : 'var(--ufsb-cinza-claro)';
+    const scoreTxt = (r.score * 100).toFixed(1);
+    const propOK   = r.total > 0 ? ((r.ok / r.total) * 100).toFixed(0) : '0';
+    const propFalh = r.total > 0 ? ((r.falhou / r.total) * 100).toFixed(0) : '0';
+    const vencBadge = r.ehVencedor
+      ? '<span class="badge badge-info" style="margin-left:6px;">Vencedor multicritério</span>'
+      : '';
+    return `
+      <div style="background:${bg};border-left:4px solid ${cor};padding:10px 14px;margin-bottom:8px;border-radius:0 3px 3px 0;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:20px;">${medalha}</span>
+          <span style="font-family:var(--font-inst);font-weight:700;font-size:15px;color:${cor};">${r.modelo}</span>
+          ${vencBadge}
+          <span style="margin-left:auto;font-family:var(--font-inst);font-size:11px;color:var(--ufsb-cinza-medio);">
+            Score composto: <strong style="color:${cor};font-size:13px;">${scoreTxt}/100</strong>
+          </span>
+        </div>
+        <div style="display:flex;gap:14px;margin-top:6px;font-size:11px;color:var(--ufsb-cinza-medio);font-family:var(--font-inst);flex-wrap:wrap;">
+          <span><span class="badge badge-ok">${r.ok}</span> OK (${propOK}%)</span>
+          <span><span class="badge badge-warn">${r.aten}</span> atenção</span>
+          <span><span class="badge badge-err">${r.falhou}</span> falhou (${propFalh}%)</span>
+          <span style="margin-left:auto;">Score pressupostos: ${(r.scorePress * 100).toFixed(1)}/100 · desempenho: ${(r.scoreDesempenho * 100).toFixed(1)}/100</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+function filtrarPressupostos() {
+  const cab = dadosPressupostos[0] || [];
+  const linhas = linhasPressupostosValidas(dadosPressupostos.slice(1));
+  const modelo = document.getElementById('select-pressuposto-modelo')?.value || '';
+  const status = document.getElementById('select-pressuposto-status')?.value || '';
+  renderTabelaPressupostos(cab, linhas, modelo, status);
+}
+
+function renderTabelaPressupostos(cab, linhas, filtroModelo, filtroStatus) {
+  const elTab = document.getElementById('tabela-pressupostos');
+  if (!elTab) return;
+  const idxRes = cab.findIndex(h => (h || '').toString().trim() === 'Resultado');
+  let lf = filtroModelo ? linhas.filter(l => (l[0] || '').toString().trim() === filtroModelo) : linhas;
+  if (filtroStatus) {
+    lf = lf.filter(l => {
+      const r = (idxRes >= 0 ? l[idxRes] : '').toString().toLowerCase();
+      if (filtroStatus === 'ok')      return r.includes('ok') || r.includes('✓');
+      if (filtroStatus === 'atencao') return r.includes('aten') || r.includes('⚠');
+      if (filtroStatus === 'falhou')  return r.includes('falh') || r.includes('✗') || r.includes('rejeit');
+      return true;
+    });
+  }
+  if (!lf.length) { elTab.innerHTML = '<div class="empty-state">Nenhum resultado encontrado para os filtros selecionados.</div>'; return; }
+  elTab.innerHTML = `<table class="tbl"><thead><tr>${cab.map(h => `<th>${h || ''}</th>`).join('')}</tr></thead><tbody>` +
+    lf.map(l => `<tr>${l.map((c, i) => {
+      if (i === idxRes && c) {
+        const txt = c.toString().trim();
+        const cls = classificarStatus(txt);
+        return `<td><span class="badge ${cls}">${txt}</span></td>`;
+      }
+      return `<td>${c != null ? c : ''}</td>`;
+    }).join('')}</tr>`).join('') + `</tbody></table>`;
+}
+
+/* =========================================================
+   CONTEXTO SAZONAL
+========================================================= */
+function processarContexto() {
+  const elTab = document.getElementById('tabela-contexto');
+  if (!dadosContexto.length || dadosContexto.length < 2) {
+    elTab.innerHTML = '<div class="empty-state">Aba CONTEXTO_SAZONAL vazia ou indisponível.</div>';
+    return;
+  }
+  const cab = dadosContexto[0] || ['Mes_Ano','Precipitacao_mm','Periodo_Letivo','Origem_Precipitacao'];
+  const linhas = dadosContexto.slice(1).filter(l => l && l[0]);
+
+  elTab.innerHTML = `<table class="tbl"><thead><tr>${cab.map(h => `<th class="${h && h.toLowerCase().includes('mm') ? 'tbl-num' : ''}">${h||''}</th>`).join('')}</tr></thead><tbody>` +
+    linhas.map(l => `<tr>${l.map((c,i) => {
+      if (i === 0) return `<td>${formatarMesAno(c)}</td>`;
+      const isNum = cab[i] && cab[i].toLowerCase().includes('mm');
+      return `<td class="${isNum?'tbl-num':''}">${c!=null?c:''}</td>`;
+    }).join('')}</tr>`).join('') + `</tbody></table>`;
+
+  const idxMes = 0;
+  const idxPrec = cab.findIndex(h => h && h.toString().toLowerCase().includes('precipitacao'));
+  const idxLet = cab.findIndex(h => h && h.toString().toLowerCase().includes('letivo'));
+  const labels = linhas.map(l => formatarMesAno(l[idxMes]));
+  const prec = linhas.map(l => parseNum(l[idxPrec]));
+  const letivo = linhas.map(l => {
+    const v = (l[idxLet] || '').toString().trim().toLowerCase();
+    return (v === 'sim' || v === '1' || v === 'true') ? 1 : 0;
+  });
+
+  const ctxP = document.getElementById('chartPrecipitacao');
+  if (charts.prec) charts.prec.destroy();
+  charts.prec = new Chart(ctxP, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        type: 'bar', label: 'Precipitação (mm)', data: prec,
+        backgroundColor: labels.map((_, i) => letivo[i] ? 'rgba(0,40,120,0.7)' : 'rgba(176,112,0,0.7)'),
+        borderWidth: 0, yAxisID: 'y'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { afterLabel: (item) => 'Letivo: ' + (letivo[item.dataIndex] ? 'Sim' : 'Não') } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 9 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 24 } },
+        y: { beginAtZero: true, title: { display: true, text: 'mm' } }
+      }
+    }
+  });
+
+  const corrInfo = document.getElementById('correlacao-info');
+  const ctxC = document.getElementById('chartCorrelacao');
+  if (charts.corr) charts.corr.destroy();
+
+  if (dadosGraficoPrevisao && dadosGraficoPrevisao.reais && dadosGraficoPrevisao.labels) {
+    const histLabels = dadosGraficoPrevisao.labels;
+    const reais = dadosGraficoPrevisao.reais;
+    const pontos = [];
+    histLabels.forEach((lbl, i) => {
+      const r = reais[i];
+      if (r === null) return;
+      const idx = labels.indexOf(lbl);
+      if (idx < 0) return;
+      const p = prec[idx];
+      if (p === null) return;
+      pontos.push({ x: p, y: r });
+    });
+    if (pontos.length >= 5) {
+      const xs = pontos.map(p => p.x);
+      const ys = pontos.map(p => p.y);
+      const mx = xs.reduce((a,b) => a+b, 0) / xs.length;
+      const my = ys.reduce((a,b) => a+b, 0) / ys.length;
+      let num = 0, dx2 = 0, dy2 = 0;
+      for (let i = 0; i < pontos.length; i++) {
+        num += (xs[i]-mx)*(ys[i]-my);
+        dx2 += (xs[i]-mx)**2;
+        dy2 += (ys[i]-my)**2;
+      }
+      const r = num / Math.sqrt(dx2 * dy2);
+      corrInfo.innerHTML = `<strong>Coeficiente de Pearson:</strong> r = ${r.toFixed(3)} (n=${pontos.length}). ${Math.abs(r) > 0.3 ? 'Correlação <strong>moderada a forte</strong> — precipitação é candidato relevante a regressor exógeno.' : 'Correlação <strong>fraca</strong> — precipitação tem efeito limitado nesta amostra.'}`;
+      charts.corr = new Chart(ctxC, {
+        type: 'scatter',
+        data: { datasets: [{ label: 'Mês', data: pontos, backgroundColor: '#002878', pointRadius: 3.5 }] },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { title: { display: true, text: 'Precipitação (mm)' }, beginAtZero: true },
+            y: { title: { display: true, text: 'Chamados/mês' }, beginAtZero: true }
+          }
+        }
+      });
+    } else {
+      corrInfo.innerHTML = '<em>Pontos insuficientes para calcular correlação confiável.</em>';
+    }
+  } else {
+    corrInfo.innerHTML = '<em>Aguardando dados de previsão para calcular correlação.</em>';
+  }
+
+  renderCorrelacao();
+}
+
+/* =========================================================
+   ORQUESTRADOR — FILTROS
+========================================================= */
+function buildFiltroSufixo() {
+  const campus    = document.getElementById('filtro-campus')?.value    || '';
+  const tipo      = document.getElementById('filtro-tipo')?.value      || '';
+  const categoria = document.getElementById('filtro-categoria')?.value || '';
+  if (categoria) return categoria;
+  if (tipo)      return `__${tipo}`;
+  if (campus)    return `__${campus}`;
+  return '';
+}
+
+function popularFiltros() {
+  if (!dadosFiltros || dadosFiltros.length < 2) return;
+  const linhas = dadosFiltros.slice(1).filter(l => l && l[0]);
+  const selCampus = document.getElementById('filtro-campus');
+  const selTipo   = document.getElementById('filtro-tipo');
+  const selCat    = document.getElementById('filtro-categoria');
+  if (!selCampus) return;
+
+  const campusAtual = selCampus.value;
+  const tipoAtual   = selTipo.value;
+  const catAtual    = selCat.value;
+
+  const campuses = linhas.filter(l => l[0] === 'campus');
+  const cats     = linhas.filter(l => l[0] === 'cat_prev' || l[0] === 'cat_corr');
+
+  selCampus.innerHTML = '<option value="">Todos os campi</option>';
+  campuses.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l[2]; opt.textContent = `${l[1]} (${l[3]})`;
+    selCampus.appendChild(opt);
+  });
+  if ([...selCampus.options].some(o => o.value === campusAtual)) selCampus.value = campusAtual;
+
+  const tipoFiltro = tipoAtual === 'Preventiva' ? 'cat_prev' : tipoAtual === 'Corretiva' ? 'cat_corr' : null;
+  const catsVisiveis = tipoFiltro ? cats.filter(l => l[0] === tipoFiltro) : cats;
+  selCat.innerHTML = '<option value="">Todas as categorias</option>';
+  catsVisiveis.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l[2]; opt.textContent = `${l[1]} (${l[3]})`;
+    selCat.appendChild(opt);
+  });
+  if ([...selCat.options].some(o => o.value === catAtual)) selCat.value = catAtual;
+}
+
+async function onFiltroChange() {
+  popularFiltros();
+  filtroSufixo = buildFiltroSufixo();
+  const lbl = filtroSufixo || '(todos)';
+  const el = document.getElementById('filtro-status');
+  if (el) el.textContent = `Sufixo: ${lbl}`;
+  await carregarDadosPreditivos();
+}
+
+function resetFiltros() {
+  ['filtro-campus','filtro-tipo','filtro-categoria'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  filtroSufixo = '';
+  modelosVisiveis = null;
+  icModeloSelecionado = null;
+  const el = document.getElementById('filtro-status');
+  if (el) el.textContent = '';
+  carregarDadosPreditivos();
+}
+
+async function carregarDadosPreditivos() {
+  const s = filtroSufixo;
+  document.getElementById('status-dot').className = 'pulse pulse-red';
+  document.getElementById('status-label').textContent = 'Sincronizando...';
+  try {
+    const [previsao, detalhes, incertezas, diagnostico, residuos, qq, validacaoCV, pressupostos] = await Promise.all([
+      fetchAba(`PREVISAO_TEMPORAL${s}`),
+      fetchAba(`PREVISAO_DETALHES${s}`),
+      fetchAba(`PREVISAO_INCERTEZAS${s}`),
+      fetchAba(`PREVISAO_DIAGNOSTICO${s}`),
+      fetchAba(`PREVISAO_RESIDUOS${s}`),
+      fetchAba(`PREVISAO_QQPLOT${s}`),
+      fetchAba(`PREVISAO_VALIDACAO${s}`),
+      fetchAba(`PREVISAO_PRESSUPOSTOS${s}`)
+    ]);
+    dadosPrevisao     = previsao     || [];
+    dadosDetalhes     = detalhes     || [];
+    dadosIncertezas   = incertezas   || [];
+    dadosDiagnostico  = diagnostico  || [];
+    dadosResiduos     = residuos     || [];
+    dadosQQ           = qq           || [];
+    dadosCV           = validacaoCV  || [];
+    dadosPressupostos = pressupostos || [];
+    processarPrevisao();
+    processarResiduos();
+    processarPressupostos();
+    registrarLog(`Filtro '${s || 'Todos'}': PREVISAO_TEMPORAL ${Math.max(0,dadosPrevisao.length-1)} linhas`, 'ok');
+    document.getElementById('status-dot').className = 'pulse pulse-green';
+    document.getElementById('status-label').textContent = 'Sincronizado';
+  } catch(e) {
+    document.getElementById('status-dot').className = 'pulse pulse-gray';
+    registrarLog(`Erro filtro: ${e.message}`, 'err');
+  }
+}
+
+/* =========================================================
+   INCERTEZAS COM TIPO (coloridas por janela)
+========================================================= */
+function renderizarIncertezasComTipo() {
+  const elInc = document.getElementById('incertezas-bootstrap');
+  if (!elInc || !dadosIncertezas.length) return;
+  const cab = dadosIncertezas[0] || [];
+  const linhas = dadosIncertezas.slice(1).filter(l => l && l[0]);
+  const idxTipo = cab.findIndex(h => (h||'').toString().trim() === 'Tipo');
+
+  const corTipo = { 'Histórico': '#e3f2fd', 'Backtest': '#fff8e1', 'Forecast': '#e8f5e9' };
+  const bdTipo  = { 'Histórico': '#1565c0', 'Backtest': '#e65100', 'Forecast': '#2e7d32' };
+
+  elInc.innerHTML = `<table class="tbl"><thead><tr>${cab.map(h=>`<th>${h||''}</th>`).join('')}</tr></thead><tbody>` +
+    linhas.map(l => {
+      const tipo = idxTipo >= 0 ? (l[idxTipo]||'').toString().trim() : '';
+      const bg = corTipo[tipo] || '';
+      const bd = bdTipo[tipo] ? `border-left:3px solid ${bdTipo[tipo]};` : '';
+      return `<tr style="background:${bg};${bd}">${l.map((c,i) => {
+        if (i === idxTipo && tipo) {
+          const emoji = tipo === 'Histórico' ? '📈' : tipo === 'Backtest' ? '🔁' : '🔮';
+          return `<td><strong>${emoji} ${tipo}</strong></td>`;
+        }
+        return `<td>${c!=null?c:''}</td>`;
+      }).join('')}</tr>`;
+    }).join('') + `</tbody></table>`;
+}
+
+/* =========================================================
+   ÁREA SOB MANUTENÇÃO
+========================================================= */
+function processarAreaManutencao() {
+  const el  = document.getElementById('chart-area-manutencao');
+  const elExog = document.getElementById('chart-area-exogena-canvas');
+  if (!el && !elExog) return;
+  if (!dadosAreaManutencao || dadosAreaManutencao.length < 2) {
+    if (el && el.parentElement) el.parentElement.style.display = 'none';
+    const card = document.getElementById('card-area-exogena');
+    if (card) card.style.display = 'none';
+    return;
+  }
+  if (el && el.parentElement) el.parentElement.style.display = '';
+  const cardExog = document.getElementById('card-area-exogena');
+  if (cardExog) cardExog.style.display = '';
+
+  const cab = dadosAreaManutencao[0] || [];
+  const idxAno = cab.findIndex(h => /ano/i.test(h||''));
+  const idxAC  = cab.findIndex(h => /constru/i.test(h||''));
+  const idxAT  = cab.findIndex(h => /total/i.test(h||''));
+  const linhas = dadosAreaManutencao.slice(1).filter(l => l && l[idxAno >= 0 ? idxAno : 0]);
+
+  const anos   = linhas.map(l => l[idxAno  >= 0 ? idxAno : 0] || '');
+  const areaC  = linhas.map(l => parseNum(l[idxAC >= 0 ? idxAC : 1]) ?? 0);
+  const areaT  = linhas.map(l => parseNum(l[idxAT >= 0 ? idxAT : 2]) ?? 0);
+  const areaExt = areaT.map((t, i) => Math.max(0, (t || 0) - (areaC[i] || 0)));
+
+  const opcoesComuns = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 14 } },
+      tooltip: { mode: 'index', intersect: false,
+        callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y?.toLocaleString('pt-BR')} m²` }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Ano' } },
+      y: { title: { display: true, text: 'Área (m²)' },
+           ticks: { callback: v => v.toLocaleString('pt-BR') } }
+    }
+  };
+
+  if (el) {
+    if (charts['area']) { charts['area'].destroy(); }
+    charts['area'] = new Chart(el, {
+      type: 'line',
+      data: {
+        labels: anos,
+        datasets: [
+          { label: 'Área Construída m²', data: areaC, borderColor: '#1565c0', backgroundColor: 'rgba(21,101,192,0.08)', fill: true, tension: 0.3, pointRadius: 4 },
+          { label: 'Área Total m²',      data: areaT, borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.08)', fill: true, tension: 0.3, pointRadius: 4 }
+        ]
+      },
+      options: opcoesComuns
+    });
+  }
+
+  if (elExog) {
+    if (charts['areaExog']) { charts['areaExog'].destroy(); }
+    charts['areaExog'] = new Chart(elExog, {
+      type: 'line',
+      data: {
+        labels: anos,
+        datasets: [
+          { label: 'Área Construída m²', data: areaC,   borderColor: '#1565c0', backgroundColor: 'rgba(21,101,192,0.10)', fill: false, tension: 0.3, pointRadius: 4 },
+          { label: 'Área Total m²',      data: areaT,   borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.10)',  fill: false, tension: 0.3, pointRadius: 4 },
+          { label: 'Área Externa m² (Total − Construída)', data: areaExt, borderColor: '#b07000', backgroundColor: 'rgba(176,112,0,0.10)', fill: false, tension: 0.3, pointRadius: 3, borderDash: [6, 4] }
+        ]
+      },
+      options: opcoesComuns
+    });
+  }
+}
+
+/* =========================================================
+   PREVISÃO POR CATEGORIA
+========================================================= */
+function processarPorCategoria() {
+  const el = document.getElementById('tabela-por-categoria');
+  if (!el) return;
+  if (!dadosPorCategoria || dadosPorCategoria.length < 2) {
+    el.innerHTML = '<div class="empty-state">Execute o motor v4.0.0+ para gerar a aba PREVISAO_POR_CATEGORIA.</div>';
+    return;
+  }
+  const cab = dadosPorCategoria[0] || [];
+  const linhas = dadosPorCategoria.slice(1).filter(l => l && l[0]);
+  el.innerHTML = `<table class="tbl"><thead><tr>${cab.map(h=>`<th>${h||''}</th>`).join('')}</tr></thead><tbody>` +
+    linhas.map(l => `<tr>${l.map(c => `<td>${c!=null?c:''}</td>`).join('')}</tr>`).join('') +
+    `</tbody></table>`;
+}
+
+/* =========================================================
+   SEMÁFORO DE CONFIANÇA
+========================================================= */
+function classificarConfianca(nrmse) {
+  if (nrmse === null || nrmse === undefined || isNaN(nrmse)) {
+    return { cor: '#9e9e9e', label: '—', badge: '', titulo: 'sem dados suficientes' };
+  }
+  if (nrmse < 0.10)  return { cor: '#43a047', label: '🟢 Alta',  badge: 'badge-ok',
+                              titulo: `nRMSE=${(nrmse*100).toFixed(1)}% — previsão muito confiável` };
+  if (nrmse < 0.25)  return { cor: '#fb8c00', label: '🟡 Média', badge: 'badge-warn',
+                              titulo: `nRMSE=${(nrmse*100).toFixed(1)}% — incerteza moderada` };
+  return                    { cor: '#e53935', label: '🔴 Baixa', badge: 'badge-err',
+                              titulo: `nRMSE=${(nrmse*100).toFixed(1)}% — alta incerteza` };
+}
+
+function atualizarSemaforo(rmse, mediaSerie) {
+  const el = document.getElementById('semaforo-confianca');
+  if (!el) return;
+  if (rmse === null || rmse === undefined || isNaN(rmse)) { el.innerHTML = ''; return; }
+  let nrmse = null;
+  if (mediaSerie !== undefined && mediaSerie !== null && mediaSerie > 0) {
+    nrmse = rmse / mediaSerie;
+  }
+  const c = classificarConfianca(nrmse);
+  const txt = nrmse !== null
+    ? `${c.label} confiança (RMSE ${rmse.toFixed(2)} · nRMSE ${(nrmse*100).toFixed(1)}%)`
+    : `RMSE ${rmse.toFixed(2)}`;
+  el.innerHTML = `<span title="${c.titulo}" style="font-weight:700;color:${c.cor};font-family:var(--font-inst);font-size:12px;letter-spacing:.04em;">${txt}</span>`;
+}
+
+/* =========================================================
+   TABELA DE CONFIANÇA POR FILTRO
+========================================================= */
+async function carregarTabelaConfianca() {
+  const el = document.getElementById('tabela-confianca');
+  if (!el) return;
+
+  const filtros = [{ rotulo: 'Geral (todos os chamados)', tipo: 'Global', sufixo: '' }];
+
+  if (dadosFiltros && dadosFiltros.length > 1) {
+    dadosFiltros.slice(1).forEach(l => {
+      if (!l || !l[0]) return;
+      const kind = l[0].toString().trim();
+      const label  = (l[1] || '').toString();
+      const sufixo = (l[2] || '').toString();
+      const n      = (l[3] || '').toString();
+      if (!sufixo) return;
+      let tipo;
+      if      (kind === 'campus')   tipo = 'Campus';
+      else if (kind === 'cat_prev') tipo = 'Cat. Preventiva';
+      else if (kind === 'cat_corr') tipo = 'Cat. Corretiva';
+      else return;
+      filtros.push({ rotulo: `${label} (n=${n})`, tipo, sufixo });
+    });
+  }
+  filtros.push({ rotulo: 'Todas as Preventivas', tipo: 'Tipo agregado', sufixo: '__Preventiva' });
+  filtros.push({ rotulo: 'Todas as Corretivas',  tipo: 'Tipo agregado', sufixo: '__Corretiva'  });
+
+  const promessas = filtros.map(async f => {
+    try {
+      const data = await fetchAba(`PREVISAO_TEMPORAL${f.sufixo}`);
+      if (!data || data.length < 2) {
+        return { ...f, rmse: null, mean: null, nrmse: null, vencedor: '—' };
+      }
+      const header = data[0] || [];
+      const idxVenc = header.findIndex(h => (h || '').toString().trim().startsWith('Vencedor'));
+      let rmse = null;
+      if (idxVenc >= 0) {
+        const m = header[idxVenc].toString().match(/=\s*([\d.,]+)/);
+        if (m) rmse = parseFloat(m[1].replace(',', '.'));
+      }
+      const valores = [];
+      for (let i = 1; i < data.length; i++) {
+        const v = parseNum(data[i] && data[i][1]);
+        if (v !== null && v > 0) valores.push(v);
+      }
+      const mean = valores.length ? valores.reduce((s, x) => s + x, 0) / valores.length : null;
+      const nrmse = (rmse !== null && mean && mean > 0) ? rmse / mean : null;
+      let vencedor = '—';
+      for (let i = 1; i < Math.min(data.length, 30); i++) {
+        const linha = data[i];
+        if (!linha) continue;
+        const cell = (idxVenc >= 0 ? linha[idxVenc] : linha[linha.length - 1] || '').toString().trim();
+        if (!cell || cell === 'In-sample' || cell.includes('Backtest')) continue;
+        if (cell.includes(' / ')) {
+          const rm = cell.split(' / ')[0].match(/^(.+?)\s*\(RMSE\)$/);
+          if (rm) { vencedor = rm[1].trim(); break; }
+        } else if (MODEL_NAMES.includes(cell)) {
+          vencedor = cell; break;
+        }
+      }
+      return { ...f, rmse, mean, nrmse, vencedor };
+    } catch (e) {
+      return { ...f, rmse: null, mean: null, nrmse: null, vencedor: '—' };
+    }
+  });
+
+  const resultados = await Promise.all(promessas);
+
+  resultados.sort((a, b) => {
+    if (a.nrmse === null && b.nrmse === null) return 0;
+    if (a.nrmse === null) return 1;
+    if (b.nrmse === null) return -1;
+    return a.nrmse - b.nrmse;
+  });
+
+  const linhasHtml = resultados.map(r => {
+    const c = classificarConfianca(r.nrmse);
+    const rmseTxt  = r.rmse  !== null ? r.rmse.toFixed(2) : '—';
+    const meanTxt  = r.mean  !== null ? r.mean.toFixed(1) : '—';
+    const nrmseTxt = r.nrmse !== null ? (r.nrmse * 100).toFixed(1) + '%' : '—';
+    const badge = r.nrmse !== null
+      ? `<span class="badge ${c.badge}" title="${c.titulo}">${c.label}</span>`
+      : '<span style="color:#9e9e9e;font-size:11px;">sem dados</span>';
+    return `<tr>
+      <td>${r.rotulo}</td>
+      <td>${r.tipo}</td>
+      <td>${r.vencedor}</td>
+      <td class="tbl-num">${meanTxt}</td>
+      <td class="tbl-num">${rmseTxt}</td>
+      <td class="tbl-num">${nrmseTxt}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `<table class="tbl"><thead><tr>
+      <th>Filtro</th>
+      <th>Tipo</th>
+      <th>Modelo vencedor</th>
+      <th class="tbl-num">Média histórica</th>
+      <th class="tbl-num">RMSE</th>
+      <th class="tbl-num">nRMSE</th>
+      <th>Confiança</th>
+    </tr></thead><tbody>${linhasHtml}</tbody></table>`;
+}
+
+/* =========================================================
+   EXPORTAR GRÁFICO COMO PNG
+========================================================= */
+function exportarGraficoPNG(canvasId, nomeArquivo) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = nomeArquivo || `${canvasId}_${new Date().toISOString().slice(0,10)}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* =========================================================
+   CARREGAR TUDO — orquestrador principal do Módulo 2
+========================================================= */
+async function carregarTudo() {
+  const s = filtroSufixo;
+  document.getElementById('status-dot').className = 'pulse pulse-red';
+  document.getElementById('status-label').textContent = 'Sincronizando...';
+  try {
+    const [
+      previsao, detalhes, incertezas, diagnostico,
+      residuos, qq, validacaoCV, pressupostos,
+      filtros, contexto, areaMat, porCategoria
+    ] = await Promise.all([
+      fetchAba(`PREVISAO_TEMPORAL${s}`),
+      fetchAba(`PREVISAO_DETALHES${s}`),
+      fetchAba(`PREVISAO_INCERTEZAS${s}`),
+      fetchAba(`PREVISAO_DIAGNOSTICO${s}`),
+      fetchAba(`PREVISAO_RESIDUOS${s}`),
+      fetchAba(`PREVISAO_QQPLOT${s}`),
+      fetchAba(`PREVISAO_VALIDACAO${s}`),
+      fetchAba(`PREVISAO_PRESSUPOSTOS${s}`),
+      fetchAba('FILTROS_DISPONIVEIS'),
+      fetchAba('CONTEXTO_SAZONAL'),
+      fetchAba('Área Manutenção'),
+      fetchAba('PREVISAO_POR_CATEGORIA')
+    ]);
+
+    dadosPrevisao        = previsao      || [];
+    dadosDetalhes        = detalhes      || [];
+    dadosIncertezas      = incertezas    || [];
+    dadosDiagnostico     = diagnostico   || [];
+    dadosResiduos        = residuos      || [];
+    dadosQQ              = qq            || [];
+    dadosCV              = validacaoCV   || [];
+    dadosPressupostos    = pressupostos  || [];
+    dadosFiltros         = filtros       || [];
+    dadosContexto        = contexto      || [];
+    dadosAreaManutencao  = areaMat       || [];
+    dadosPorCategoria    = porCategoria  || [];
+
+    popularFiltros();
+    processarPrevisao();
+    processarResiduos();
+    processarPressupostos();
+    processarContexto();
+    processarAreaManutencao();
+    processarPorCategoria();
+    carregarTabelaConfianca();
+
+    document.getElementById('status-dot').className = 'pulse pulse-green';
+    document.getElementById('status-label').textContent = 'Sincronizado';
+    const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Bahia' });
+    document.getElementById('ultima-att').textContent = `Atualizado: ${ts}`;
+  } catch(e) {
+    document.getElementById('status-dot').className = 'pulse pulse-gray';
+    document.getElementById('status-label').textContent = 'Erro ao carregar';
+    registrarLog(`Erro geral: ${e.message}`, 'err');
+  }
+}
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+carregarTudo();
+setInterval(() => carregarTudo(), 5 * 60 * 1000);
+</script>
+</body>

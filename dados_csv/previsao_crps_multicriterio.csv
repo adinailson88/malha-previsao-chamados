@@ -1,0 +1,11 @@
+﻿Modelo,RMSE,CRPS,Desvio_CV,Score_Multicriterio,Posição
+LSTM_Forecast,37.694,20.891,—,0.1652,1
+Holt-Winters,34.796,37.441,16.527,0.2211,2
+Theta,34.832,46.995,16.296,0.2681,3
+Prophet/UC,55.898,16.078,—,0.2965,4
+SARIMAX-12,33.411,43.024,19.667,0.3553,5
+ARIMA,47.058,68.115,14.165,0.4192,6
+SARIMAX-6,42.684,63.784,—,0.4561,7
+GradientBoosting,90.637,18.212,—,0.6123,8
+,,,,,
+Vencedor multicritério: LSTM_Forecast (score = 0.1652),Pesos: RMSE=0.5 · CRPS=0.3 · Desvio_CV=0.2,"Score = combinação ponderada normalizada [0,1]; menor é melhor.",RMSE = precisão pontual; CRPS = calibração de incerteza; Desvio_CV = estabilidade.,,

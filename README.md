@@ -24,9 +24,9 @@ Ficam fora deste repositorio:
 3. `dados/*.json`: snapshots de resultados pertinentes ao Artigo 2.
 4. `dados_csv/*.csv`: versoes tabulares derivadas dos JSONs.
 5. `scripts/baixar_dados_hub.py`: baixa do hub `malha-ia` os JSONs publicos usados pelo dashboard.
-6. `scripts/exportar_dados_json.py`: alternativa para exportar diretamente do Apps Script/Google Sheets.
-7. `.github/workflows/previsao_chamados_global.yml`: workflow pesado para recalcular a previsao.
-8. `.github/workflows/atualizar-dados-hub.yml`: workflow leve para atualizar snapshots a partir do hub.
+6. `scripts/exportar_dados_json.py`: alternativa manual para exportar diretamente do Apps Script/Google Sheets, quando necessario.
+7. `.github/workflows/previsao_chamados_global.yml`: workflow de compatibilidade que sincroniza as previsoes publicas do hub.
+8. `.github/workflows/atualizar-dados-hub.yml`: workflow periodico para atualizar snapshots a partir do hub.
 
 ## Contrato com o hub de dados
 
@@ -73,11 +73,9 @@ python scripts\baixar_dados_hub.py
 python scripts\exportar_dados_csv.py
 ```
 
-Executar previsao completa contra Google Sheets:
+Recalculo autenticado:
 
-```powershell
-python motor_previsao_chamados.py --apenas-previsao-chamados
-```
+O recalculo completo contra Google Sheets fica centralizado no repositorio `malha-ia`, que publica os snapshots em `dados/*.json`. Este repositorio nao precisa de `AUTENTICACAO_GOOGLE` para atualizar o dashboard.
 
 ## Dados e reprodutibilidade
 
@@ -86,4 +84,3 @@ Os arquivos em `dados/` sao snapshots derivados. Para uma analise final de artig
 ## Licenca
 
 Informação insuficiente para verificar.
-

@@ -23,8 +23,9 @@ O repositorio `adinailson88/malha-ia` permanece como hub central dos dados. Este
 | CONTEXTO_SAZONAL | `dados/contexto_sazonal.json` | Variaveis exogenas sazonais |
 | FILTROS_DISPONIVEIS | `dados/filtros_disponiveis.json` | Filtros de campus/tipo/categoria |
 | Area Manutencao | `dados/area_manutencao.json` | Area construida e area total por ano |
+| Artefato local | `dados/protocolo_zuur.json` | Diagnostico transversal de exploracao de dados segundo Zuur et al. (2010) |
+| Artefato local | `dados/analise_gam.json` | Adequacao de GAM como benchmark explicavel para contagens |
 
 ## Regra de fronteira
 
 `CHAMADOS` nao deve ser duplicado aqui como fonte primaria. Quando for necessario auditar a base bruta, usar o hub `malha-ia` ou a planilha institucional vigente.
-

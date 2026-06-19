@@ -1,0 +1,13 @@
+campo,valor
+status_geral,adequado_para_benchmark
+familia_recomendada,Negative Binomial ou Poisson com checagem de sobredispersao
+observacoes_historicas,137
+coeficiente_variacao,0.666
+outliers_iqr,3
+benchmark_status,executado
+benchmark_metodo,base_aditiva_fourier_log_count
+benchmark_RMSE,91.3554
+benchmark_MAE,83.794
+comparacao_status,pior_que_melhor_modelo_publicado
+comparacao_modelo_referencia,SARIMAX-12
+comparacao_delta_rmse,57.8754

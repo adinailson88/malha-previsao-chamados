@@ -1,0 +1,125 @@
+{
+  "artefato": "analise_gam",
+  "eixo": "previsao_chamados",
+  "fonte": "dados/previsao_temporal.json",
+  "status_geral": "adequado_para_benchmark",
+  "alvo": "Quantidade Real",
+  "familia_recomendada": "Negative Binomial ou Poisson com checagem de sobredispersao",
+  "suporte_amostral": {
+    "observacoes_historicas": 137,
+    "minimo_operacional": 36,
+    "zeros": 2,
+    "media": 99.4526,
+    "coeficiente_variacao": 0.666,
+    "outliers_iqr": 3
+  },
+  "efeitos_aditivos": [
+    {
+      "termo": "s(tendencia)",
+      "status": "recomendado",
+      "evidencia": "Inclinacao linear preliminar por mes: 0.9065 chamados/mes."
+    },
+    {
+      "termo": "s(mes, cyclic=True)",
+      "status": "detectavel",
+      "mes_maior_media": 5,
+      "mes_menor_media": 12,
+      "amplitude_media_mensal": 82.3636,
+      "evidencia": "Maior media no mes 5; menor media no mes 12."
+    },
+    {
+      "termo": "exogenas institucionais",
+      "status": "dependente_de_contexto",
+      "evidencia": "Usar variaveis ja publicadas em contexto_sazonal.json quando houver alinhamento temporal."
+    }
+  ],
+  "benchmark_aditivo": {
+    "status": "executado",
+    "metodo": "base_aditiva_fourier_log_count",
+    "familia_operacional": "quasi-Poisson aproximado por log(y+0.5)",
+    "holdout_meses": 12,
+    "metricas_holdout": {
+      "n": 12,
+      "MAE": 83.794,
+      "RMSE": 91.3554,
+      "MAPE_percentual": 64.9293
+    },
+    "coeficientes": [
+      1.077036,
+      12.460964,
+      -9.441517,
+      0.051367,
+      -0.168774,
+      -0.047259,
+      0.004672
+    ],
+    "forecast_12_meses": [
+      {
+        "periodo": "2026-06-01",
+        "previsao": 67.6831
+      },
+      {
+        "periodo": "2026-07-01",
+        "previsao": 58.7571
+      },
+      {
+        "periodo": "2026-08-01",
+        "previsao": 51.2727
+      },
+      {
+        "periodo": "2026-09-01",
+        "previsao": 46.1836
+      },
+      {
+        "periodo": "2026-10-01",
+        "previsao": 42.3342
+      },
+      {
+        "periodo": "2026-11-01",
+        "previsao": 38.6029
+      },
+      {
+        "periodo": "2026-12-01",
+        "previsao": 35.2597
+      },
+      {
+        "periodo": "2027-01-01",
+        "previsao": 33.5209
+      },
+      {
+        "periodo": "2027-02-01",
+        "previsao": 34.2083
+      },
+      {
+        "periodo": "2027-03-01",
+        "previsao": 36.8346
+      },
+      {
+        "periodo": "2027-04-01",
+        "previsao": 39.2555
+      },
+      {
+        "periodo": "2027-05-01",
+        "previsao": 38.8082
+      }
+    ],
+    "leitura": "Benchmark aditivo executavel sem dependencias novas; usar como triagem ate ajuste GLMGam/Negative Binomial completo."
+  },
+  "comparacao_modelos_publicados": {
+    "status": "pior_que_melhor_modelo_publicado",
+    "modelo_publicado_referencia": "SARIMAX-12",
+    "rmse_modelo_publicado": 33.48,
+    "rmse_benchmark_aditivo": 91.3554,
+    "delta_rmse": 57.8754
+  },
+  "recomendacao_dashboard": "Exibir GAM como camada explicavel/benchmark, sem substituir SARIMAX, Prophet/UC, GradientBoosting, LSTM ou Ensemble.",
+  "proximas_validacoes": [
+    "Ajustar GAM com validacao temporal rolling-origin no ambiente com statsmodels/scipy.",
+    "Comparar MAE, RMSE, MAPE e cobertura dos intervalos contra os modelos ja publicados.",
+    "Verificar autocorrelacao dos residuos antes de usar inferencia do GAM no artigo."
+  ],
+  "limites": [
+    "Este artefato diagnostica adequacao e desenho do GAM; nao declara superioridade empirica.",
+    "Sem benchmark temporal executado, usar a frase: Informação insuficiente para verificar."
+  ]
+}

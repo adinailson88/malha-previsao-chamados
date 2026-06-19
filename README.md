@@ -71,7 +71,17 @@ Atualizar snapshots a partir do hub:
 ```powershell
 python scripts\baixar_dados_hub.py
 python scripts\exportar_dados_csv.py
+python scripts\gerar_protocolo_zuur.py
+python scripts\gerar_analise_gam.py
 ```
+
+## Protocolo de exploracao de dados
+
+O diagnostico transversal baseado em Zuur, Ieno & Elphick (2010) e gerado por `scripts/gerar_protocolo_zuur.py`, publicado em `dados/protocolo_zuur.json` e resumido em `dados_csv/protocolo_zuur.csv`. A metodologia reutilizavel no artigo esta em [`docs/METODOLOGIA_PROTOCOLO_ZUUR.md`](docs/METODOLOGIA_PROTOCOLO_ZUUR.md).
+
+## Camada GAM explicavel
+
+A adequacao de Generalized Additive Models e registrada por `scripts/gerar_analise_gam.py`, com saida em `dados/analise_gam.json` e `dados_csv/analise_gam.csv`. No eixo de chamados, GAM e tratado como benchmark explicavel para contagens, com familia Poisson/Negative Binomial a validar por sobredispersao. A metodologia esta em [`docs/METODOLOGIA_GAM.md`](docs/METODOLOGIA_GAM.md).
 
 Recalculo autenticado:
 

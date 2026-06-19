@@ -1,0 +1,148 @@
+{
+  "gerado_em": "2026-06-18T02:50:46.647893+00:00",
+  "repositorio": "malha-previsao-chamados",
+  "eixo": "previsao de volume mensal de chamados",
+  "referencia": "Zuur, A.F., Ieno, E.N. & Elphick, C.S. (2010). A protocol for data exploration to avoid common statistical problems. Methods in Ecology and Evolution, 1(1), 3-14. doi:10.1111/j.2041-210X.2009.00001.x",
+  "escopo": "Exploracao sobre snapshots publicos do eixo de previsao de chamados; sem base bruta e sem credenciais.",
+  "diagnostico_do_que_falta": [
+    "Nenhum calculo bruto adicional e necessario para iniciar o protocolo: os principais insumos ja estao publicados.",
+    "Falta apenas materializar o resumo transversal em dados/protocolo_zuur.json e exibi-lo no dashboard."
+  ],
+  "passos": [
+    {
+      "passo": 1,
+      "titulo": "Outliers em Y e covariaveis",
+      "status": "verificado",
+      "evidencia": "dados/previsao_temporal.json",
+      "resultado": {
+        "n": 137,
+        "min": 0.0,
+        "q1": 51.0,
+        "q3": 141.0,
+        "max": 349.0,
+        "outliers_baixos": 0,
+        "outliers_altos": 3
+      },
+      "mudanca_minima": "Manter tratamento ja existente no motor e registrar o total de pontos tratados no painel."
+    },
+    {
+      "passo": 2,
+      "titulo": "Homogeneidade de variancia",
+      "status": "verificado",
+      "evidencia": "dados/previsao_pressupostos.json",
+      "resultado": {
+        "n_testes": 7,
+        "ok": 2,
+        "atencao": 5,
+        "resultados": [
+          "ATENÃ‡ÃƒO (heterocedasticidade)",
+          "ATENÃ‡ÃƒO (heterocedasticidade)",
+          "ATENÃ‡ÃƒO (heterocedasticidade)",
+          "OK (homocedasticidade nÃ£o rejeitada)",
+          "ATENÃ‡ÃƒO (heterocedasticidade)",
+          "OK (homocedasticidade nÃ£o rejeitada)",
+          "ATENÃ‡ÃƒO (heterocedasticidade)"
+        ]
+      },
+      "mudanca_minima": "Exibir sintese dos testes Breusch-Pagan ja publicados."
+    },
+    {
+      "passo": 3,
+      "titulo": "Normalidade",
+      "status": "verificado",
+      "evidencia": "dados/previsao_pressupostos.json e dados/previsao_qqplot.json",
+      "resultado": {
+        "n_testes": 14,
+        "ok": 0,
+        "atencao": 14,
+        "resultados": [
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)",
+          "ATENÃ‡ÃƒO (normalidade rejeitada)"
+        ]
+      },
+      "mudanca_minima": "Manter Q-Q plot e registrar que normalidade e diagnostico, nao pre-condicao para publicar forecast."
+    },
+    {
+      "passo": 4,
+      "titulo": "Zeros ou ausencia estrutural",
+      "status": "verificado",
+      "evidencia": "dados/previsao_temporal.json",
+      "resultado": {
+        "n_zeros": 2,
+        "n_observacoes": 137
+      },
+      "mudanca_minima": "Declarar zeros como meses sem chamados registrados, sem imputar demanda."
+    },
+    {
+      "passo": 5,
+      "titulo": "Colinearidade entre covariaveis",
+      "status": "verificado",
+      "evidencia": "dados/previsao_pressupostos.json",
+      "resultado": {
+        "n_testes": 10,
+        "ok": 10,
+        "atencao": 0,
+        "resultados": [
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)",
+          "OK (VIF<5)"
+        ]
+      },
+      "mudanca_minima": "Expor VIF dos regressores exogenos quando o modelo usa contexto sazonal."
+    },
+    {
+      "passo": 6,
+      "titulo": "Relacoes entre Y e X",
+      "status": "verificado",
+      "evidencia": "dados/previsao_granger.json",
+      "resultado": {
+        "linhas_granger": 6
+      },
+      "mudanca_minima": "Referenciar causalidade temporal exploratoria e nao causalidade substantiva definitiva."
+    },
+    {
+      "passo": 7,
+      "titulo": "Interacoes",
+      "status": "verificado",
+      "evidencia": "dados/previsao_por_categoria.json",
+      "resultado": {
+        "linhas_categoria": 31
+      },
+      "mudanca_minima": "Usar categoria como interacao operacional sem misturar com o eixo de classificacao."
+    },
+    {
+      "passo": 8,
+      "titulo": "Independencia temporal",
+      "status": "verificado",
+      "evidencia": "dados/previsao_pressupostos.json e dados/previsao_validacao.json",
+      "resultado": {
+        "independencia": {
+          "n_testes": 0,
+          "ok": 0,
+          "atencao": 0,
+          "resultados": []
+        },
+        "folds_validacao": 8
+      },
+      "mudanca_minima": "Manter validacao rolling-origin e testes Durbin-Watson/Ljung-Box como diagnostico central."
+    }
+  ],
+  "metodo_artigo": "No eixo de previsao de chamados, a exploracao seguiu os oito passos de Zuur et al. (2010) sobre a serie mensal de contagens, residuos dos modelos, validacao rolling-origin, regressores sazonais e recortes por categoria. Outliers foram tratados antes dos ajustes, normalidade e homocedasticidade foram avaliadas como diagnosticos dos residuos, colinearidade foi examinada por VIF quando havia variaveis exogenas, e independencia temporal foi avaliada por Durbin-Watson, Ljung-Box e validacao rolling-origin."
+}

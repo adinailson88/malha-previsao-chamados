@@ -175,6 +175,7 @@ footer.app-footer { margin-top: 2rem; padding: 1rem 24px; border-top: 1px solid 
   </div>
 
   <div class="tabs">
+    <button class="tab" onclick="switchTab('screen-zuur',this)">Protocolo Zuur</button>
     <button class="tab active" onclick="switchTab('screen-preditivo',this)">Previsão Temporal</button>
     <button class="tab" onclick="switchTab('screen-residuos',this)">Resíduos</button>
     <button class="tab" onclick="switchTab('screen-pressupostos',this)">Pressupostos</button>
@@ -353,6 +354,20 @@ footer.app-footer { margin-top: 2rem; padding: 1rem 24px; border-top: 1px solid 
   </div><!-- /screen-pressupostos -->
 
   <!-- ===== TAB 4: VARIÁVEIS EXÓGENAS ===== -->
+  <div class="screen" id="screen-zuur">
+
+    <div class="card">
+      <div class="card-title">Protocolo de Exploracao de Dados</div>
+      <div id="protocolo-zuur"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-title">Camada GAM explicavel</div>
+      <div id="analise-gam"><div class="empty-state">Carregando...</div></div>
+    </div>
+
+  </div><!-- /screen-zuur -->
+
   <div class="screen" id="screen-contexto">
 
     <div class="card" style="margin-bottom:1rem;">
@@ -486,7 +501,9 @@ function switchTab(id, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+  const screenId = String(id).startsWith('screen-') ? id : 'screen-' + id;
+  const screen = document.getElementById(screenId);
+  if (screen) screen.classList.add('active');
 }
 
 function parseNum(v) {
@@ -1916,6 +1933,78 @@ function exportarGraficoPNG(canvasId, nomeArquivo) {
   link.click();
 }
 
+async function renderProtocoloZuur() {
+  const el = document.getElementById('protocolo-zuur');
+  if (!el) return;
+  try {
+    const resp = await fetch('dados/protocolo_zuur.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const protocolo = await resp.json();
+    const linhas = (protocolo.passos || []).map(p => `
+      <tr>
+        <td class="tbl-num">${p.passo}</td>
+        <td>${p.titulo || ''}</td>
+        <td><span class="badge ${p.status === 'verificado' ? 'badge-ok' : 'badge-warn'}">${p.status || ''}</span></td>
+        <td>${p.evidencia || ''}</td>
+        <td>${p.mudanca_minima || ''}</td>
+      </tr>`).join('');
+    el.innerHTML = `
+      <div class="info-box">${protocolo.referencia || ''}</div>
+      <div class="info-box">${protocolo.metodo_artigo || ''}</div>
+      <div class="tbl-scroll"><table class="tbl">
+        <thead><tr><th>Passo</th><th>Diagnostico</th><th>Status</th><th>Evidencia</th><th>Mudanca minima</th></tr></thead>
+        <tbody>${linhas}</tbody>
+      </table></div>`;
+  } catch (e) {
+    el.innerHTML = `<div class="empty-state">dados/protocolo_zuur.json indisponivel: ${e.message}</div>`;
+  }
+}
+
+async function renderAnaliseGam() {
+  const el = document.getElementById('analise-gam');
+  if (!el) return;
+  try {
+    const resp = await fetch('dados/analise_gam.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const gam = await resp.json();
+    const suporte = gam.suporte_amostral || {};
+    const efeitos = (gam.efeitos_aditivos || []).map(e => `
+      <tr>
+        <td>${e.termo || ''}</td>
+        <td><span class="badge ${String(e.status || '').includes('recomendado') || String(e.status || '').includes('detectavel') ? 'badge-ok' : 'badge-warn'}">${e.status || ''}</span></td>
+        <td>${e.evidencia || ''}</td>
+      </tr>`).join('');
+    const bench = gam.benchmark_aditivo || {};
+    const mets = bench.metricas_holdout || {};
+    const comp = gam.comparacao_modelos_publicados || {};
+    const compTxt = comp.status === 'informacao_insuficiente'
+      ? 'Informação insuficiente para verificar.'
+      : `${comp.status || ''}; referencia ${comp.modelo_publicado_referencia || ''} (RMSE ${comp.rmse_modelo_publicado ?? 'n/a'}), delta RMSE ${comp.delta_rmse ?? 'n/a'}.`;
+    const prevs = (bench.forecast_12_meses || []).slice(0, 12).map(p => `
+      <tr>
+        <td>${p.periodo || ''}</td>
+        <td class="tbl-num">${p.previsao != null ? Number(p.previsao).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) : ''}</td>
+      </tr>`).join('');
+    const proximos = (gam.proximas_validacoes || []).map(x => `<li>${x}</li>`).join('');
+    el.innerHTML = `
+      <div class="info-box"><strong>Status:</strong> ${gam.status_geral || ''} | <strong>Familia:</strong> ${gam.familia_recomendada || ''}</div>
+      <div class="info-box"><strong>Suporte:</strong> ${suporte.observacoes_historicas || 0} observacoes; CV ${suporte.coeficiente_variacao ?? 'n/a'}; outliers IQR ${suporte.outliers_iqr ?? 'n/a'}.</div>
+      <div class="info-box"><strong>Benchmark aditivo:</strong> ${bench.status || 'nao executado'} (${bench.metodo || ''}). Holdout ${bench.holdout_meses || 0} meses: MAE ${mets.MAE ?? 'n/a'}, RMSE ${mets.RMSE ?? 'n/a'}, MAPE ${mets.MAPE_percentual ?? 'n/a'}%.</div>
+      <div class="info-box"><strong>Comparacao com modelos publicados:</strong> ${compTxt}</div>
+      <div class="tbl-scroll"><table class="tbl">
+        <thead><tr><th>Termo GAM</th><th>Status</th><th>Evidencia</th></tr></thead>
+        <tbody>${efeitos}</tbody>
+      </table></div>
+      <div class="tbl-scroll" style="margin-top:10px;"><table class="tbl">
+        <thead><tr><th>Periodo forecast GAM</th><th>Chamados previstos</th></tr></thead>
+        <tbody>${prevs}</tbody>
+      </table></div>
+      <div class="info-box"><strong>Validacoes antes de afirmar ganho:</strong><ul>${proximos}</ul></div>`;
+  } catch (e) {
+    el.innerHTML = `<div class="empty-state">dados/analise_gam.json indisponivel: ${e.message}</div>`;
+  }
+}
+
 /* =========================================================
    CARREGAR TUDO — orquestrador principal do Módulo 2
 ========================================================= */
@@ -1964,6 +2053,8 @@ async function carregarTudo() {
     processarAreaManutencao();
     processarPorCategoria();
     carregarTabelaConfianca();
+    renderProtocoloZuur();
+    renderAnaliseGam();
 
     document.getElementById('status-dot').className = 'pulse pulse-green';
     document.getElementById('status-label').textContent = 'Sincronizado';

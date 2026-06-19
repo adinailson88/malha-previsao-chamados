@@ -1,0 +1,9 @@
+passo,titulo,status,evidencia,mudanca_minima
+1,Outliers em Y e covariaveis,verificado,dados/previsao_temporal.json,Manter tratamento ja existente no motor e registrar o total de pontos tratados no painel.
+2,Homogeneidade de variancia,verificado,dados/previsao_pressupostos.json,Exibir sintese dos testes Breusch-Pagan ja publicados.
+3,Normalidade,verificado,dados/previsao_pressupostos.json e dados/previsao_qqplot.json,"Manter Q-Q plot e registrar que normalidade e diagnostico, nao pre-condicao para publicar forecast."
+4,Zeros ou ausencia estrutural,verificado,dados/previsao_temporal.json,"Declarar zeros como meses sem chamados registrados, sem imputar demanda."
+5,Colinearidade entre covariaveis,verificado,dados/previsao_pressupostos.json,Expor VIF dos regressores exogenos quando o modelo usa contexto sazonal.
+6,Relacoes entre Y e X,verificado,dados/previsao_granger.json,Referenciar causalidade temporal exploratoria e nao causalidade substantiva definitiva.
+7,Interacoes,verificado,dados/previsao_por_categoria.json,Usar categoria como interacao operacional sem misturar com o eixo de classificacao.
+8,Independencia temporal,verificado,dados/previsao_pressupostos.json e dados/previsao_validacao.json,Manter validacao rolling-origin e testes Durbin-Watson/Ljung-Box como diagnostico central.

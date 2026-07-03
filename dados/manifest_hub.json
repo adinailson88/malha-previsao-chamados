@@ -1,10 +1,10 @@
 {
-  "gerado_em_utc": "2026-07-03T07:48:16.056356+00:00",
+  "gerado_em_utc": "2026-07-03T09:39:46.098568+00:00",
   "hub_raw": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados",
   "arquivos": {
     "previsao_temporal.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_temporal.json",
-      "linhas": 172
+      "linhas": 173
     },
     "previsao_detalhes.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_detalhes.json",
@@ -12,7 +12,7 @@
     },
     "previsao_incertezas.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_incertezas.json",
-      "linhas": 1064
+      "linhas": 1071
     },
     "previsao_diagnostico.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_diagnostico.json",
@@ -20,11 +20,11 @@
     },
     "previsao_residuos.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_residuos.json",
-      "linhas": 2154
+      "linhas": 2172
     },
     "previsao_qqplot.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_qqplot.json",
-      "linhas": 2154
+      "linhas": 2172
     },
     "previsao_validacao.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_validacao.json",
@@ -52,7 +52,7 @@
     },
     "contexto_sazonal.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/contexto_sazonal.json",
-      "linhas": 124
+      "linhas": 98
     },
     "filtros_disponiveis.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/filtros_disponiveis.json",

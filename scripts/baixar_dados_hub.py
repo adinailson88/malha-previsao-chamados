@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -32,11 +33,32 @@ ARQUIVOS = [
 ]
 
 
-def baixar_json(url: str, timeout: int) -> object:
+def baixar_json(url: str, timeout: int, tentativas: int = 5) -> object:
     req = Request(url, headers={"User-Agent": "malha-previsao-chamados/1.0"})
-    with urlopen(req, timeout=timeout) as resp:
-        raw = resp.read().decode("utf-8")
-    return json.loads(raw)
+    ultima_excecao: Exception | None = None
+    for tentativa in range(1, tentativas + 1):
+        try:
+            with urlopen(req, timeout=timeout) as resp:
+                raw = resp.read().decode("utf-8")
+            return json.loads(raw)
+        except HTTPError as exc:
+            ultima_excecao = exc
+            if exc.code not in (429, 500, 502, 503, 504) or tentativa == tentativas:
+                raise
+        except (URLError, TimeoutError) as exc:
+            ultima_excecao = exc
+            if tentativa == tentativas:
+                raise
+        espera = min(60, 2 ** tentativa)
+        print(f"AVISO tentativa {tentativa}/{tentativas} falhou para {url}: {ultima_excecao}. Nova tentativa em {espera}s.")
+        time.sleep(espera)
+    raise RuntimeError(f"Falha ao baixar {url}: {ultima_excecao}")
+
+
+def falha_transitoria(exc: Exception) -> bool:
+    if isinstance(exc, HTTPError):
+        return exc.code in (429, 500, 502, 503, 504)
+    return isinstance(exc, (URLError, TimeoutError))
 
 
 def main() -> int:
@@ -66,7 +88,22 @@ def main() -> int:
             manifest["arquivos"][nome] = {"url": url, "linhas": linhas}
             print(f"OK {nome}: {linhas if linhas is not None else 'json'}")
         except (HTTPError, URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
+            destino = saida / nome
             manifest["falhas"][nome] = f"{type(exc).__name__}: {exc}"
+            if falha_transitoria(exc) and destino.exists():
+                try:
+                    dados_cache = json.loads(destino.read_text(encoding="utf-8"))
+                    linhas = len(dados_cache) if isinstance(dados_cache, list) else None
+                    manifest.setdefault("falhas_toleradas", {})[nome] = manifest["falhas"].pop(nome)
+                    manifest["arquivos"][nome] = {
+                        "url": url,
+                        "linhas": linhas,
+                        "origem": "cache_local_por_falha_transitoria",
+                    }
+                    print(f"AVISO {nome}: {exc}; mantido snapshot local existente.")
+                    continue
+                except (json.JSONDecodeError, OSError):
+                    pass
             print(f"AVISO {nome}: {exc}")
 
     (saida / "manifest_hub.json").write_text(

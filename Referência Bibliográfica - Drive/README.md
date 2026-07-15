@@ -6,7 +6,7 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 
 - Referências selecionadas nesta etapa: **47**
 - Fichas com resumo já disponível: **26**
-- Fichas que ainda exigem leitura integral: **21**
+- Fichas com arquivo disponível e resumo analítico ainda não cadastrado no índice: **21**
 - Índice geral: [00_INDICE_ACERVO.xlsx](https://docs.google.com/spreadsheets/d/1hpSUv-qeEBpCTeQ0CFDROuTq8rSrmraV/edit)
 - Pasta principal do acervo: [Google Drive](https://drive.google.com/drive/folders/1cNnLTU6ENFIUX5yi6M17QO-o-kfaf5al)
 
@@ -16,12 +16,12 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 2. Leia o resumo e a indicação de uso no repositório.
 3. Antes de citar método, número ou conclusão específica, abra o PDF pelo link do Drive e confirme a informação in loco.
 4. Não trate “aderência” como qualidade metodológica; ela indica proximidade temática com o projeto.
-5. Itens marcados como leitura pendente servem apenas como candidatos até a conferência integral.
+5. Itens sem resumo analítico cadastrado possuem arquivo disponível no Drive; confirme no documento os dados específicos antes de citar.
 
 ## Plano de atualização por etapas
 
 - **Etapa 1 — concluída neste arquivo:** inventário, seleção por aderência, links diretos e incorporação dos resumos já existentes.
-- **Etapa 2:** leitura integral dos itens pendentes, processada por pasta do Drive na ordem 01 a 08.
+- **Etapa 2:** elaboração de resumos analíticos completos dos itens ainda sem síntese cadastrada, processados por pasta do Drive na ordem 01 a 08, com citações, páginas e conferência no texto original.
 - **Etapa 3:** revisão da aderência específica ao repositório e inclusão de trechos de uso recomendado, limitações e páginas relevantes.
 - **Etapa 4:** atualização contínua quando novos documentos forem adicionados ao índice do acervo.
 
@@ -169,8 +169,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** não registradas
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Estatistica”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Estatistica”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1qDYxOoL5zhLZVTBxq-8LlixoVVh2mfnU/view?usp=drivesdk)
 
 ### 3. Fornara, F.; Bonaiuto, M.; Bonnes, M. (2010) — Cross-Validation of Abbreviated Perceived Residential Environment Quality (PREQ) and Neighborhood Attachment (NA) Indicators
@@ -181,8 +181,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Psicometria; qualidade ambiental percebida; apego ao bairro
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Psicometria”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Psicometria”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1shasc9eKJOtvR-Mbzai3LjHo283BbhKJ/view?usp=drivesdk)
 
 ### 4. Razali (2011) — Power Comparisons Normality Tests
@@ -193,8 +193,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** não registradas
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Estatistica”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Estatistica”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/14y9niXJ4DTQDXrvc55ti2nTcFxq41cPV/view?usp=drivesdk)
 
 ### 5. Landeiro (2011) — Introducao Programa R
@@ -205,8 +205,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** não registradas
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Estatistica”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Estatistica”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1W6pPxFvhwUuDXbPVb-XwdEHZb5N1bZ1w/view?usp=drivesdk)
 
 ### 6. Suh, D.; Chang, S. (2012) — An Energy and Water Resource Demand Estimation Model for Multi-Family Housing Complexes in Korea
@@ -265,8 +265,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Contratação de energia; otimização; análise de sensibilidade
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Energia”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Energia”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/11z3lphEPUJ2rbB0qlg3HpQ-wvvS4vxUF/view?usp=drivesdk)
 
 ### 11. Hassanizadeh, N.; Noorzai, E. (2020) — Improving lighting efficiency in existing art museums: a case study
@@ -337,8 +337,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** não registradas
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Financiamento”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Financiamento”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1jGcyFoXCROEFPLDnRtu8ibZlQmOMPB4Y/view?usp=drivesdk)
 
 ### 17. Bhadiyadra, V. (2025) — Life Cycle Cost Analysis of Green Industrial Buildings
@@ -349,8 +349,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Custo de ciclo de vida (LCC); edifícios industriais verdes
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Custos”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Custos”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1qFYACnvV0_yO3cccY98m6idLdoXwuinf/view?usp=drivesdk)
 
 ### 18. Leite Ribeiro, L. M.; Piccinini Scolaro, T.; Ghisi, E. (2025) — LEED Certification in Building Energy Efficiency: A Review of Its Performance Efficacy and Global Applicability
@@ -361,8 +361,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** LEED; eficiência energética; certificação de edifícios
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “EficienciaEnergetica”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “EficienciaEnergetica”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1LsPT_XkuwKVDUX2gGDNx4SHsmbZW4Flj/view?usp=drivesdk)
 
 ## 07_Contexto_Universitario_e_Urbano
@@ -375,8 +375,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Habitação de interesse social; sustentabilidade; MCMV
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Habitacao”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Habitacao”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1TrS12gb_hwYOqbceC3NpBfSxWYpn6s7t/view?usp=drivesdk)
 
 ### 2. Denez (2016) — Dilemas Universidades Multicampi
@@ -387,8 +387,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** não registradas
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Multicampi”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Multicampi”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1pNF8b26izcfJykbd0V5RSD1OJf0zyWkV/view?usp=drivesdk)
 
 ### 3. Macke, J.; Casagrande, R. M.; Sarate, J. A. R.; Silva, K. A. (2018) — Smart City and Quality of Life: citizens' perception in a Brazilian case study
@@ -399,8 +399,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Smart city; qualidade de vida; percepção
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “SmartCity”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “SmartCity”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1EAYK_AkXNytvDm1llSSIvbILjiDwj3qO/view?usp=drivesdk)
 
 ### 4. Curi Filho, W. R. (2018) — Impacto da universidade na comunidade: um estudo de caso em uma instituição pública brasileira
@@ -411,8 +411,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Universidade; impacto na comunidade; estudo de caso
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Universidade”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Universidade”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1hwghWKzLBoKnWGUl55z-ya1kpnm9DBnO/view?usp=drivesdk)
 
 ### 5. Faganello, A. M. P. (2019) — Estudo sistêmico das inter-relações dos construtos que influenciam a satisfação residencial (modelo a partir da percepção cognitiva do indivíduo)
@@ -423,8 +423,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Satisfação residencial; construtos; modelo sistêmico
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “SatisfacaoResidencial”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “SatisfacaoResidencial”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1mY03B3tqUjQt1Y23Qf6o9LccAEktkEVi/view?usp=drivesdk)
 
 ### 6. Calderari, E. S.; Felipe, J. P. (orgs.) (2021) — Novos Campi Universitários Brasileiros: Processos e Impactos – Volume 1
@@ -435,8 +435,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Campi universitários; expansão universitária
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Campi”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Campi”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1ORhe8uRCMUcCf-bycjRyOzDqlrsaaa4E/view?usp=drivesdk)
 
 ### 7. Araujo, C. I. P. da R. de; Machado, G. A.; Silva, L. S. da; Oliveira, A. da S.; Macke, J. (2023) — Smart city como promotora de qualidade de vida, atividade física e saúde: análise da cidade que acolhe a COP 30 – Belém
@@ -447,8 +447,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Smart city; qualidade de vida; Belém
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “SmartCity”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “SmartCity”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1bVwndpWZruRbK22ZympEFpWompkfdMSd/view?usp=drivesdk)
 
 ### 8. Alici, N. (2026) — IoT-enabled indoor environments in smart cities: a systematic review on energy efficiency, user comfort, and environmental sustainability
@@ -471,8 +471,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Campi universitários; expansão universitária
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Campi”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Campi”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1AgkHMzQYdZb1hAAklTgTd3OGdZMyQKN5/view?usp=drivesdk)
 
 ## 08_Metodologia
@@ -485,8 +485,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Metodologia; redação de tese; pesquisa bibliográfica
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1Bfwp7nhN8eBt_AQK0L9uEPU8EePL0Wc6/view?usp=drivesdk)
 
 ### 2. Marconi, M. de A.; Lakatos, E. M. (2003) — Fundamentos de Metodologia Científica
@@ -497,8 +497,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Metodologia científica
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1fPjuI0Nq3uk8zztzI_1Jg8fo1lOpvFgG/view?usp=drivesdk)
 
 ### 3. Gil, A. C. (2008) — Métodos e Técnicas de Pesquisa Social
@@ -509,8 +509,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Metodologia; pesquisa social
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/17uUmcVnWBbGfpwr6Svt-HPFfz26g7-EI/view?usp=drivesdk)
 
 ### 4. Ford (2010) — Scientific Method Ecological Research
@@ -521,8 +521,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** não registradas
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1LZcN4fyNYxwKDwio7FnKi7LE_ioAbLcJ/view?usp=drivesdk)
 
 ### 5. Prodanov, C. C.; Freitas, E. C. de (2013) — Metodologia do Trabalho Científico: Métodos e Técnicas da Pesquisa e do Trabalho Acadêmico
@@ -533,8 +533,8 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Aderência geral registrada:** a avaliar
 - **Palavras-chave:** Metodologia do trabalho científico
 - **Como pode fundamentar este repositório:** Pode sustentar a previsão de demanda, a escolha de modelos, a validação temporal e a interpretação dos padrões de manutenção.
-- **Resumo:** O índice atual identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém síntese validada do conteúdo. Consulte o documento no Drive antes de atribuir método, resultados ou conclusões.
-- **Situação da ficha:** Leitura integral pendente; não usar como evidência específica sem conferir o PDF.
+- **Resumo:** O arquivo completo está disponível no Google Drive. O índice identifica a obra pelo título e pelo tema “Metodologia”, mas ainda não contém um resumo analítico completo cadastrado. A síntese detalhada, com citações e páginas, será produzida na próxima etapa; até lá, confirme no documento qualquer método, resultado, número ou conclusão.
+- **Situação da ficha:** Arquivo completo disponível no Drive; resumo analítico completo ainda não cadastrado no índice.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/1NSMLiAou9n-gE3nGLUnRO8oLLpYnOVJE/view?usp=drivesdk)
 
 ### 6. Jiang, Y.; Lin, C.; Meng, W.; Yu, C.; Cohen, A. M.; Smalheiser, N. R. (2014) — Rule-based deduplication of article records from bibliographic databases

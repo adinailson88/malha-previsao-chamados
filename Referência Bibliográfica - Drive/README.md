@@ -38,6 +38,7 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - **Resumo:** Estudo de caso qualitativo (entrevistas semiestruturadas com 5 executivos) em uma universidade pública da Malásia, com cerca de 40.000 m² de área construída em 111 edifícios, 34 elevadores e cerca de 850 equipamentos de climatização. A manutenção é predominantemente corretiva e cíclica, sem sistema informatizado (CMMS), sem indicadores de desempenho claros, com terceirização de mais de 95% dos serviços elétricos/mecânicos e fluxo de reclamações fragmentado (dockets em papel). O gasto médio anual em manutenção foi de RM 15 milhões nos últimos 5 anos; identifica 13 fragilidades de gestão e recomenda um framework de manutenção mais sistemático.
 - **Situação da ficha:** Resumo disponível no índice do acervo.
 - **Acesso:** [Abrir o arquivo no Google Drive](https://drive.google.com/file/d/16TYNnHpEGytumgAsRLRjG07RqbUHYjSY/view?usp=drivesdk)
+- **Ficha detalhada:** [Consultar resumo completo, citações e páginas](https://github.com/adinailson88/lerArquivosReferencias/blob/main/Refer%C3%AAncia%20Bibliogr%C3%A1fica%20-%20Drive/fichas/2010_ARTIGO_ManutencaoPredial_Building_Maintenance_Malaysian_University_Campus.md)
 
 ### 2. Araújo Neto, P. G. de (2015) — A manutenção predial nas edificações públicas: um estudo sobre a legislação
 

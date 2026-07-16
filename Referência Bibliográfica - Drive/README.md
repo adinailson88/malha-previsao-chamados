@@ -605,3 +605,11 @@ Esta pasta reúne referências do acervo bibliográfico mantido no Google Drive 
 - [Barbosa (2016) — facilities e manutenção terceirizada na UFPE](https://github.com/adinailson88/lerArquivosReferencias/blob/main/Refer%C3%AAncia%20Bibliogr%C3%A1fica%20-%20Drive/fichas/2016_RELATORIO_FacilityManagement_Barbosa_Gestao_Facilities_UFPE.md) — Caso de IFES sobre preventiva/corretiva, contrato, materiais, sistemas e padronização.
 
 As fichas completas incluem síntese, método, resultados, citações verificadas, limitações e link do texto integral no Drive.
+
+## Fichas detalhadas concluídas — lote 03 (2017–2019)
+
+- [Ferreira (2017) — modelo de gestão da manutenção predial em IFES mineiras](https://github.com/adinailson88/lerArquivosReferencias/blob/main/Refer%C3%AAncia%20Bibliogr%C3%A1fica%20-%20Drive/fichas/2017_RELATORIO_ManutencaoPredial_Ferreira_Gestao_Manutencao_IFES_Mineiras.md) — Diagnóstico de 11 universidades e modelo com cadastro histórico, software de manutenção e programa de inspeções. [Texto completo no Drive](https://drive.google.com/file/d/1GNvIYIlz75noILVEZtbJjRb1XbAiahCX/view?usp=drivesdk).
+- [Tan, Zaman e Sutrisna (2018) — fluxo de conhecimento entre construção e facilities management](https://github.com/adinailson88/lerArquivosReferencias/blob/main/Refer%C3%AAncia%20Bibliogr%C3%A1fica%20-%20Drive/fichas/2018_ARTIGO_FacilityManagement_Tan_Construction_Knowledge_Information_Flow.md) — Lacunas de handover, qualidade dos dados de ativos e integração OCC, Soft Landings, BIM e CAFM. [Texto completo no Drive](https://drive.google.com/file/d/1NGXzyZn4roJxugV1D9th5sJbDqU90TDL/view?usp=drivesdk).
+- [Yoon e Cha (2018) — avaliação fuzzy e estratégia ótima de facilities management](https://github.com/adinailson88/lerArquivosReferencias/blob/main/Refer%C3%AAncia%20Bibliogr%C3%A1fica%20-%20Drive/fichas/2018_ARTIGO_FacilityManagement_Yoon_Fuzzy_Evaluation_Office_Buildings.md) — 12 fatores críticos, 18 indicadores, FMPI e escolha multicritério de estratégia de gestão. [Texto completo no Drive](https://drive.google.com/file/d/1KPSqPU-kM6X0NEe-vs43qbdm-EBQQfsL/view?usp=drivesdk).
+
+As fichas deste lote incluem síntese detalhada, método, resultados, citações verificadas com página, limitações e orientação de uso.

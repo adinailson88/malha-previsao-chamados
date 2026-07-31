@@ -1,5 +1,5 @@
 {
-  "gerado_em_utc": "2026-07-31T07:52:12.868906+00:00",
+  "gerado_em_utc": "2026-07-31T09:22:25.791223+00:00",
   "hub_raw": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados",
   "arquivos": {
     "previsao_temporal.json": {
@@ -8,7 +8,7 @@
     },
     "previsao_detalhes.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_detalhes.json",
-      "linhas": 111
+      "linhas": 112
     },
     "previsao_incertezas.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_incertezas.json",
@@ -36,7 +36,7 @@
     },
     "previsao_por_categoria.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_por_categoria.json",
-      "linhas": 32
+      "linhas": 31
     },
     "previsao_diebold_mariano.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_diebold_mariano.json",
@@ -52,11 +52,11 @@
     },
     "contexto_sazonal.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/contexto_sazonal.json",
-      "linhas": 113
+      "linhas": 123
     },
     "filtros_disponiveis.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/filtros_disponiveis.json",
-      "linhas": 40
+      "linhas": 39
     },
     "area_manutencao.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/area_manutencao.json",

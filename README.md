@@ -3,7 +3,7 @@
 Repositorio do Artigo 2 do ecossistema Malha IA: previsao temporal de volume de chamados de manutencao predial e estatisticas associadas.
 
 Repositorio-hub de dados: [adinailson88/malha-ia](https://github.com/adinailson88/malha-ia)  
-Dashboard previsto: `https://adinailson88.github.io/malha-previsao-chamados/`
+Dashboard publicado: `https://adinailson88.github.io/malha-previsao-chamados/`
 
 ## Escopo
 

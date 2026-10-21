@@ -1,5 +1,5 @@
 {
-  "gerado_em_utc": "2026-10-21T05:41:55.015191+00:00",
+  "gerado_em_utc": "2026-10-21T11:08:56.611594+00:00",
   "hub_raw": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados",
   "arquivos": {
     "previsao_temporal.json": {
@@ -48,11 +48,11 @@
     },
     "previsao_granger.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/previsao_granger.json",
-      "linhas": 4
+      "linhas": 7
     },
     "contexto_sazonal.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/contexto_sazonal.json",
-      "linhas": 126
+      "linhas": 121
     },
     "filtros_disponiveis.json": {
       "url": "https://raw.githubusercontent.com/adinailson88/malha-ia/main/dados/filtros_disponiveis.json",

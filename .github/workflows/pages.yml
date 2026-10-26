@@ -7,9 +7,6 @@ on:
       - '**.html'
       - 'dados/**'
       - '.github/workflows/pages.yml'
-  workflow_run:
-    workflows: ["Atualizar dados do hub"]
-    types: [completed]
   workflow_dispatch:
 
 permissions:

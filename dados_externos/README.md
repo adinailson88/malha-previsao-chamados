@@ -9,7 +9,7 @@ Estas tabelas alimentam os modelos descritos em `docs/DIAGNOSTICO_SERIE_CUSTOS.m
 | Precipitação mensal por campus | `precipitacao_mensal_por_campus.csv` (ainda não gerado) | Ausente: a rede da sessão bloqueia `archive-api.open-meteo.com`, o INMET e a NASA POWER | Executar `python scripts/coletar_precipitacao.py` em máquina com internet; soma mensal (mm) como variável principal e média dos valores diários (mm/dia) como auxiliar |
 | Número de pessoas por campus | `pessoas_por_campus_SIMULADO.csv` | Simulado, sem base empírica, apenas para testar o pipeline | Substituir pelos dados reais mantendo as colunas, trocando `origem` para o nome da fonte |
 | Calendário letivo | `calendario_letivo_ufsb.csv` | Pendente: o site `ufsb.edu.br` está bloqueado na sessão | Preencher início e término de cada período a partir dos PDFs oficiais de calendário da UFSB |
-| Área construída e total | `area_global_projetada.csv` (reserva) e `area_por_campus.csv` (da planilha) | Observada de 2015 a 2026 (global, sem detalhe por campus); 2027 e 2028 projetados com +5% ao ano | Fornecer área por campus e ano |
+| Área construída e total | `area_global_projetada.csv` (reserva) e `area_por_campus.csv` (da planilha) | Global observada de 2015 a 2026; 2027 e 2028 projetados com +5% ao ano. Por campus: existe em `malha-ods-esg/dados/patrimonio_imobiliario_campus_ano.json` (`Area_Utilizacao_m2`, 2015 a 2025; soma igual à área global até 2021), a confirmar | Copiar para a aba `COV_AREA_CAMPUS` (ou ler do repositório ODS) após confirmação; projetar 2026 com +5% |
 
 Observações de método:
 

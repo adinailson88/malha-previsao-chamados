@@ -30,15 +30,19 @@ jobs:
         run: python scripts/sincronizar_covariaveis_planilha.py
 
       - name: Coletar precipitacao
+        if: ${{ !cancelled() }}
         run: python scripts/coletar_precipitacao.py
 
       - name: Gerar area projetada e reserva simulada
+        if: ${{ !cancelled() }}
         run: python scripts/gerar_covariaveis.py
 
       - name: Verificar origem das covariaveis
+        if: ${{ !cancelled() }}
         run: python scripts/gerar_covariaveis.py --verificar
 
       - name: Commitar atualizacoes
+        if: ${{ !cancelled() }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

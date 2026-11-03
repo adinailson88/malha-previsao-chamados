@@ -32,3 +32,7 @@ Nao duplicar `dados/chamados.json` por padrao. A base bruta pertence ao hub `mal
 Planilha CHAMADOS: https://docs.google.com/spreadsheets/d/1VgHY6NmCQLtA3lcfQAzGIRqJFZGHwcGhZ4zaXkqOmz4/edit
 
 As covariaveis externas (pessoas, area por campus, calendario letivo, precipitacao) ficam em `dados_externos/`, sao lidas das abas `COV_*` da planilha por `scripts/sincronizar_covariaveis_planilha.py` e nao devem ser editadas a mao no GitHub. Dado com `origem` SIMULADO ou status PENDENTE nao pode entrar em resultado de artigo (`python scripts/gerar_covariaveis.py --verificar --modo artigo`).
+
+## Continuacao do trabalho
+
+O estado, as decisoes, as pendencias e os comandos para continuar no computador do autor estao em `docs/CONTEXTO_CONTINUACAO.md`.

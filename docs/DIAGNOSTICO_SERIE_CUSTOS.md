@@ -66,13 +66,16 @@ Tratamento da quantidade de chamados no custo: no ajuste, usa-se a quantidade ob
 
 Rolling-origin com no mínimo 24 origens, horizontes de 1, 3, 6 e 12 meses, e agregação trimestral e anual do custo. Métricas: para a quantidade, MASE, RMSSE, CRPS e cobertura; para o custo, pinball loss, CRPS e cobertura dos intervalos, com quantis de 50%, 90% e 95% para reserva orçamentária. Comparadores obrigatórios: média histórica, média e mediana de 12 meses. Análises de sensibilidade: janela (2018 e 2021 em diante), com e sem "Posto de trabalho", e covariáveis reais contra covariáveis removidas.
 
-### 5.5 Dados novos necessários
+### 5.5 Dados externos: situação e decisões do autor
 
-1. Série de precipitação mensal por campus de estação oficial (a fonte e a estação devem ser definidas; a disponibilidade e o formato de acesso não foram verificados).
-2. Número de estudantes, docentes, técnicos e terceirizados por campus e período.
-3. Calendário acadêmico real por campus e ano.
-4. Área construída e total por campus e ano, com conferência dos valores repetidos de 2023 e 2024.
-5. Confirmação do que representa a data de abertura para o custo e, se existir, data de execução ou de empenho da OS.
+Decisões do autor em 03/11/2026: (a) a precipitação mensal por cidade pode vir da internet, calculada como média dos valores diários do mês; (b) se não houver número de pessoas, usar dados simulados e substituí-los depois pelos reais; (c) o calendário acadêmico é o da UFSB; (d) quando faltar área ou número de pessoas, projetar o ano seguinte como o último valor mais 5%.
+
+1. Planilha: o manifesto do hub lista 24 abas globais e nenhuma delas contém número de pessoas, calendário letivo ou área por campus; a única aba de área é "Área Manutenção", global e anual. Portanto esses dados não existem na planilha lida.
+2. Precipitação: não foi possível baixar, porque a rede da sessão bloqueia Open-Meteo, INMET e NASA POWER. Foi criado `scripts/coletar_precipitacao.py` (testado apenas com dados sintéticos de verificação da agregação), que usa a API Open-Meteo por coordenada dos municípios de Itabuna, Teixeira de Freitas, Porto Seguro e Ilhéus. É reanálise e não estação; a escolha é do autor.
+3. Pessoas: criado `dados_externos/pessoas_por_campus_SIMULADO.csv` com valores arbitrários, marcados `SIMULADO`, e projeção de +5% ao ano a partir de 2027. O script de verificação bloqueia o uso em artigo.
+4. Calendário: o site da UFSB está bloqueado na sessão. A busca indicou que a UFSB passou do regime quadrimestral para o semestral em 2024 (Resolução Consuni nº 22/2022, segundo notícia institucional), e que os PDFs de calendário estão em `ufsb.edu.br/acesso-informacao/documentos/109-documentos-academicos/402-calendarios`. Criado `dados_externos/calendario_letivo_ufsb.csv` com os anos e links e status `PENDENTE`. A variável deve ser a fração de dias do mês em período letivo.
+5. Área: criado `dados_externos/area_global_projetada.csv` (observada de 2015 a 2026; 2027 e 2028 projetados com +5% ao ano). A área por campus continua inexistente.
+6. Identificação do que ainda falta para resultados válidos: dados reais de pessoas, precipitação coletada, calendário preenchido e área por campus.
 
 ### 5.6 Resultado preliminar de verificação (somente com o que existe hoje)
 

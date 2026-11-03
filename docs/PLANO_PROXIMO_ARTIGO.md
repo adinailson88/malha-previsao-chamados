@@ -265,4 +265,58 @@ Experimentos:
 
 A execução de 1 a 7 depende de Python científico e do acesso à planilha, e pode ser feita em GitHub Actions de repositório público ou localmente, sem relação com o saldo de créditos da nuvem, que expira em 05/11/2026.
 
-Estado: etapa 4 concluída
+## Etapa 5. Proposta de particionamento e organização dos repositórios (A recomendado)
+
+Esta proposta não move, remove nem altera nenhum arquivo. Ela segue a regra do hub (`docs/PARTICIONAMENTO_REPOSITORIOS.md`): permanece no hub o que serve a mais de um eixo ou é fonte oficial; vai para o repositório do eixo o que pertence a um único artigo. Cada ação abaixo é reversível por `git revert` e deve ser aprovada individualmente pelo autor.
+
+### 5.1 Papel de cada repositório
+
+1. `malha-ia` (hub): permanece como fonte única de `chamados.json`, `contexto_sazonal.json`, `area_manutencao.json`, `filtros_disponiveis.json`, scripts de exportação e motores que escrevem na planilha. Passa a ser o único local de correção do parse de datas nos três motores (chamados, custos e ODS).
+2. `malha-previsao-chamados` (Artigo 2, A): torna-se o repositório reprodutível do artigo, com código de avaliação, resultados versionados por rodada, texto de apoio e dashboard.
+3. `malha-previsao-custos` (Artigo 3): continua separado; recebe a correção de datas e a recodificação dos JSON; reutiliza do Artigo 2 apenas o módulo de avaliação, por cópia versionada ou pacote, e não por duplicação manual.
+4. `classificacao-chamados`: permanece independente; B fica como material de reserva neste repositório, sem migração.
+5. Repositório "Demais": não criar agora; nada do que foi inventariado justifica, e a regra do hub exige inventário final do hub antes.
+
+### 5.2 Estrutura-alvo de `malha-previsao-chamados`
+
+Estrutura proposta, mantendo na raiz os arquivos citados em `AGENTS.md` até que esse arquivo seja atualizado:
+
+1. Raiz: `README.md`, `AGENTS.md`, `CITATION.cff` (corrigido para este repositório e para o Artigo 2), `LICENSE` (licença a ser escolhida pelo autor; hoje ausente), `dashboard.html`, `index.html`, `motor_previsao_chamados.py` (cópia sincronizada com o hub).
+2. `docs/`: `CONTRATO_DADOS.md`, `METODOLOGIA_GAM.md`, `METODOLOGIA_PROTOCOLO_ZUUR.md`, `PLANO_PROXIMO_ARTIGO.md`, `referencias/README.md` (movido de `Referência Bibliográfica - Drive/`) e `decisoes/` para registros curtos de decisão (por exemplo, janela e alvo adotados).
+3. `avaliacao/` (novo): módulos de série, validação rolling-origin, métricas e testes, escritos para rodar sem credenciais a partir de um snapshot do hub, de modo a separar o experimento do artigo do motor que escreve na planilha.
+4. `resultados/` (novo): saídas por rodada, em subpastas datadas, cada uma com hash do snapshot e do commit do hub, versões de pacotes e sementes; substitui o uso de `dados/previsao_*.json` como evidência do artigo, que deixam de ser fonte de resultados citáveis por serem mutáveis.
+5. `tests/` (novo): teste de regressão do parse de datas (casos `2026-05-06` e `2026-05-29`), testes das métricas e do esquema rolling-origin.
+6. `scripts/`: `baixar_dados_hub.py` e `exportar_dados_csv.py` (sincronização), subpasta `analise/` para `gerar_analise_gam.py` e `gerar_protocolo_zuur.py`, e `exportar_dados_json.py` (uso manual).
+7. `dados/` e `dados_csv/`: apenas snapshots de leitura, conforme `AGENTS.md`; `chamados.json` continua ausente.
+8. `.github/workflows/`: um workflow único de sincronização com frequência reduzida, `pages.yml` restrito aos arquivos publicáveis e `testes.yml` novo para executar `tests/`.
+
+### 5.3 Itens para remoção ou fusão (nenhum removido)
+
+| Item | Ação | Condição | Reversão |
+|---|---|---|---|
+| `.github/workflows/previsao_chamados_global.yml` | Remover | Fusão prévia de seu gatilho diário no workflow de sincronização | `git revert` |
+| Cron de 30 minutos em `atualizar-dados-hub.yml` | Reduzir para diário | Aprovação do autor; hoje gera cerca de 5 a 6 commits de bot por dia | Alterar o cron |
+| `Referência Bibliográfica - Drive/` | Mover para `docs/referencias/` | Atualizar links internos, se houver | `git mv` inverso |
+| `path: '.'` em `pages.yml` | Publicar somente `index.html`, `dashboard.html` e `dados/` | Testar o dashboard após a mudança | Restaurar linha |
+| `execucao_offline/requirements.txt` | Separar `requirements-sync.txt` (pandas) de `requirements-motor.txt` | Nenhuma | `git revert` |
+| `CITATION.cff` | Corrigir URLs (`adinailson88`), título e escopo | Escolha da licença | `git revert` |
+| `dados/previsao_*.json` vazios | Restaurar após reexecução, não apagar | Correção do motor no hub | Não se aplica |
+| Linhas vazias de `malha-ia/dados/chamados.json` | Propor ao hub a poda das 33.838 linhas vazias | Fora do escopo deste repositório | Fora do escopo |
+
+Não há arquivo considerado lixo irrecuperável neste repositório; os candidatos acima são duplicações, configurações excessivas ou arquivos fora do local adequado. Nenhum dado de `dados_csv/` é candidato à remoção.
+
+### 5.4 Ações em outros repositórios (fora desta branch, a serem decididas pelo autor)
+
+1. `malha-ia`: corrigir `extrair_serie_temporal` em `motor_previsao_chamados.py` (formato `%Y-%m-%d %H:%M` explícito, `dayfirst=False`, erro explícito para formato desconhecido), aplicar a mesma verificação às linhas 555 e 604 de `motor_previsao_custos.py` e 357 e 358 de `motor_ods.py`, reexecutar `previsao_chamados_global.yml` e restaurar `PREVISAO_TEMPORAL`. Esta é a ação de maior prioridade e a única que desbloqueia A.
+2. `malha-previsao-custos`: após a correção no hub, ressincronizar os snapshots e recodificar os JSON com texto corrompido ("PerÃ­odo").
+3. `classificacao-chamados`: nenhuma alteração; registrar, no plano daquele repositório, que B é reserva e que o fatiamento deve ser evitado.
+
+### 5.5 Sequência sugerida de execução
+
+1. Aprovar a correção no hub e reexecutar a previsão global (ação 5.4.1).
+2. Neste repositório: corrigir `CITATION.cff` e criar `LICENSE` (após escolha do autor), mover a pasta de referências, fundir os workflows e restringir `pages.yml`.
+3. Criar `avaliacao/`, `resultados/` e `tests/`, com o teste de regressão de datas como primeiro commit.
+4. Executar o experimento completo e congelar a primeira rodada em `resultados/`.
+5. Avaliar o gate de decisão da seção 3.4 e confirmar A ou voltar a B.
+
+Estado: etapa 5 concluída

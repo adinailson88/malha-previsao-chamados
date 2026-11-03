@@ -202,4 +202,67 @@ Recomenda-se escrever A primeiro, com um ponto de decisão (gate) antes do inves
 
 Riscos e ressalvas da recomendação: a qualidade de A depende de dados que o autor controla (planilha `CHAMADOS`, formato das datas), que não foram acessados nesta análise; o ganho esperado de modelos complexos é pequeno; e a duração da execução do motor completo (o workflow do hub declara limite de 600 minutos) é um custo real. A estimativa de esforço em horas não foi calculada por falta de dados sobre a disponibilidade do autor.
 
-Estado: etapa 3 concluída
+## Etapa 4. Estrutura do artigo recomendado (A)
+
+### 4.1 Título provisório
+
+Português: Previsão mensal de chamados de manutenção predial em universidade federal multicampi: comparação de modelos sob validação rolling-origin e calibração de intervalos preditivos.
+
+Inglês: Monthly forecasting of building maintenance requests at a multicampus federal university: model comparison under rolling-origin validation and predictive interval calibration.
+
+O título não afirma superioridade de nenhuma família de modelos, porque o resultado depende da reexecução.
+
+### 4.2 Resumo provisório (152 palavras, sem resultados numéricos por não existirem)
+
+A previsão do volume mensal de chamados de manutenção em edificações públicas apoia o dimensionamento de equipes e contratos, mas a literatura concentra-se em classificação de pedidos e em manutenção de equipamentos, com poucas avaliações de previsão de demanda sob validação temporal rigorosa. Este estudo compara modelos estatísticos, de aprendizado de máquina e de aprendizado profundo na previsão mensal de chamados de uma universidade federal multicampi, separando a demanda corretiva da manutenção preventiva programada e tratando quebras estruturais. A avaliação emprega origens rolling-origin em horizontes de 1 a 12 meses, comparadores simples (média histórica e média móvel), MASE, RMSSE e CRPS, teste de Diebold-Mariano com correção de pequena amostra e cobertura empírica dos intervalos preditivos. Documenta-se ainda o efeito de um erro de interpretação de datas sobre a sazonalidade aparente. Os resultados serão inseridos após a reexecução com a série corrigida [a preencher]. Discute-se o uso dos intervalos no planejamento da manutenção.
+
+### 4.3 Seções e conteúdo
+
+1. Introdução. Problema de gestão (dimensionamento de equipes, contratos e orçamento com demanda variável), lacuna identificada na seção 2.8, objetivo, perguntas de pesquisa (qual família supera a média histórica, qual a calibração dos intervalos, qual a sensibilidade à janela e ao alvo) e contribuições, entre elas o registro do efeito de um erro de parse de datas na sazonalidade aparente. Nesta seção cita-se o artigo de classificação apenas para delimitar fronteira, sem reutilizar seus resultados.
+2. Referencial e trabalhos relacionados. Previsão de demanda de manutenção e de mão de obra em edificações (itens 1 a 4 da seção 2.8), competições de previsão e comparadores simples (itens 5, 6 e 8), avaliação rolling-origin e métricas escaladas (itens 7, 11 e 12), testes de acurácia preditiva (itens 9 e 10) e avaliação probabilística (Gneiting e Raftery, 2007), mais normas aplicáveis ao contexto da manutenção (NBR 5674, NBR 14037 e NBR ISO 41001), cuja pertinência ao texto deve ser conferida pelo autor.
+3. Dados e construção da série. Fonte (GLPI e planilha institucional, via hub `malha-ia`), commit e data da extração, regras de limpeza (remoção de linhas vazias, que somam 69,9% das linhas do `chamados.json`), interpretação explícita do formato ISO das datas, exclusão do mês corrente, janelas 2018 em diante e 2021 em diante, separação corretiva e preventiva, recortes por campus e Reitoria, e descrição dos regimes (adoção, pico, queda de 2020, recuperação). Inclui um quadro de eventos institucionais que afetam a série.
+4. Método. Modelos (ETS, Theta, ARIMA, SARIMAX, regressão binomial negativa ou GAM, Gradient Boosting direto e, condicionalmente, LSTM), comparadores (Naive, Naive sazonal, média histórica, média de 12 meses), esquema rolling-origin com no mínimo 24 origens e horizontes 1, 3, 6 e 12, métricas pontuais (MASE, RMSSE, MAE, RMSE) e probabilísticas (CRPS, pinball, cobertura de 80% e 95%), Diebold-Mariano com correção de Harvey-Leybourne-Newbold sobre erros fora da amostra, bootstrap em blocos, previsão conforme, testes de quebra e de sazonalidade, e regras de reprodutibilidade (sementes, versões, hash do snapshot).
+5. Resultados. Descrição da série corrigida e do efeito do erro de datas, desempenho por horizonte e por recorte, comparações pareadas, calibração dos intervalos, análises de sensibilidade (janela, alvo, tratamento de outliers) e previsão de 12 meses à frente com intervalo.
+6. Discussão. Quais modelos justificam a complexidade, uso dos intervalos no planejamento (horas de equipe e contratos, usando custo por chamado do repositório de custos), implicações para gestão pública e para ODS 9, 11 e 12, e limitações (instituição única, poucos meses estáveis, intervenções de processo não modeladas).
+7. Conclusão. Respostas objetivas às perguntas de pesquisa e agenda futura (séries hierárquicas por campus e categoria, variáveis exógenas de clima e calendário acadêmico, validação em outra instituição).
+8. Declarações e referências. Disponibilidade de dados e código (snapshots e scripts do repositório, base bruta sob controle do hub), contribuição dos autores, uso de ferramentas de IA, conflito de interesses (autor também gestor do sistema de chamados) e referências em ABNT ou no padrão do periódico escolhido.
+
+### 4.4 Tabelas e figuras previstas
+
+Tabelas: T1 estatísticas descritivas por regime, campus e tipo; T2 especificação dos modelos e hiperparâmetros; T3 desempenho por modelo e horizonte (MASE, RMSSE, CRPS); T4 comparações pareadas de Diebold-Mariano com correção, com ajuste para múltiplas comparações; T5 cobertura e largura dos intervalos; T6 sensibilidade à janela e ao alvo; T7 efeito do erro de datas sobre ACF, perfil sazonal e ranking de modelos (pode ir ao suplemento).
+
+Figuras: F1 fluxo de dados e pipeline (hub, snapshot, motor, validação); F2 série mensal com regimes e quebras; F3 comparação entre perfil sazonal e ACF da série corrigida e da invertida; F4 erro por horizonte e por modelo; F5 gráfico de cobertura e fan chart de um recorte; F6 previsão de 12 meses com intervalo para o total e por campus.
+
+Material suplementar: diagnósticos de resíduos, protocolo de exploração de Zuur et al. (2010), análise GAM, tabela completa de hiperparâmetros e checklist de reprodutibilidade.
+
+### 4.5 Pendências por responsável
+
+Autor (decisões e conferências que dependem do pesquisador):
+
+1. Definir a variável-alvo principal (corretiva, total ou ambas) e a janela principal (2018 em diante ou 2021 em diante), com a outra como sensibilidade.
+2. Confirmar o formato real das datas na planilha `CHAMADOS` (texto ISO, texto dia/mês/ano ou data nativa) e autorizar a correção do motor no hub.
+3. Escolher o periódico e confirmar Qualis vigente na Plataforma Sucupira e a política de taxas.
+4. Informar o status da relação com o orientador e a definição de coautoria, que não constam nos repositórios e não foram presumidos.
+5. Documentar mudanças de processo que afetam a série (migração de sistema, política de abertura de chamados, contratos de manutenção preventiva, greves e períodos sem aulas), em especial 2015 a 2017 e 2020.
+6. Decidir a relação de citação entre este artigo e o artigo de classificação (citação como contexto, sem reutilizar tabelas).
+
+Dados novos:
+
+1. Série de precipitação com fonte e estação identificadas (INMET ou equivalente) e calendário acadêmico oficial por campus, em lugar do indicador binário atual.
+2. Programação contratual de manutenção preventiva por mês, para explicar a série preventiva.
+3. Séries de custo por mês do repositório de custos, para a análise de valor operacional (após correção do mesmo defeito de datas, que afeta o Artigo 3).
+4. Taxonomia revisada do artigo de classificação, se houver recortes por categoria.
+
+Experimentos:
+
+1. Corrigir o parse de datas e reexecutar o pipeline no hub, restaurando `previsao_temporal.json` e `previsao_detalhes.json`.
+2. Implementar o rolling-origin multi-horizonte com no mínimo 24 origens e os comparadores simples.
+3. Ajustar ETS, Theta, ARIMA, SARIMAX, regressão binomial negativa ou GAM, Gradient Boosting e, se TensorFlow estiver disponível, LSTM.
+4. Calcular MASE, RMSSE, CRPS, pinball e cobertura, e Diebold-Mariano com correção de Harvey-Leybourne-Newbold.
+5. Testar quebras estruturais e sazonalidade na série corrigida.
+6. Executar a previsão conforme e o bootstrap em blocos para intervalos.
+7. Produzir as tabelas T1 a T7 e as figuras F1 a F6 por script único versionado, com hash do snapshot.
+
+A execução de 1 a 7 depende de Python científico e do acesso à planilha, e pode ser feita em GitHub Actions de repositório público ou localmente, sem relação com o saldo de créditos da nuvem, que expira em 05/11/2026.
+
+Estado: etapa 4 concluída

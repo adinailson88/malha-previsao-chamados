@@ -1,10 +1,26 @@
 {
   "aviso": "Coordenadas aproximadas do centro de cada municipio, nao dos campi; conferir antes do uso em artigo.",
   "campi": {
-    "Campus Jorge Amado": {"municipio": "Itabuna", "lat": -14.7876, "lon": -39.2781},
-    "Campus Paulo Freire": {"municipio": "Teixeira de Freitas", "lat": -17.5399, "lon": -39.7408},
-    "Campus Sosígenes Costa": {"municipio": "Porto Seguro", "lat": -16.4435, "lon": -39.0643},
-    "Reitoria": {"municipio": "Ilhéus", "lat": -14.7889, "lon": -39.0494}
+    "Campus Jorge Amado": {
+      "municipio": "Itabuna",
+      "lat": -14.7876,
+      "lon": -39.2781
+    },
+    "Campus Paulo Freire": {
+      "municipio": "Teixeira de Freitas",
+      "lat": -17.5399,
+      "lon": -39.7408
+    },
+    "Campus Sosígenes Costa": {
+      "municipio": "Porto Seguro",
+      "lat": -16.4435,
+      "lon": -39.0643
+    },
+    "Reitoria": {
+      "municipio": "Ilhéus",
+      "lat": -14.7889,
+      "lon": -39.0494
+    }
   },
   "precipitacao": {
     "fonte": "Open-Meteo Historical Weather API (reanalise ERA5), consulta por coordenada",
@@ -12,8 +28,8 @@
     "inicio": "2018-01-01",
     "variavel_diaria": "precipitation_sum",
     "fuso": "America/Bahia",
-    "agregacao_mensal_principal": "media dos valores diarios do mes (mm/dia), conforme definicao do autor",
-    "agregacao_mensal_auxiliar": "soma mensal (mm), registrada para comparacao",
+    "agregacao_mensal_principal": "soma dos valores diarios do mes (mm), decisao do autor em 03/11/2026",
+    "agregacao_mensal_auxiliar": "media dos valores diarios do mes (mm/dia), registrada para comparacao",
     "fracao_minima_dias_validos": 0.8
   },
   "pessoas_simuladas": {
@@ -22,14 +38,83 @@
     "razao_2018_sobre_base": 0.7,
     "crescimento_projecao_anual": 0.05,
     "base": {
-      "Campus Jorge Amado": {"estudantes": 2500, "docentes": 150, "tecnicos": 70, "terceirizados": 60},
-      "Campus Paulo Freire": {"estudantes": 1500, "docentes": 90, "tecnicos": 45, "terceirizados": 40},
-      "Campus Sosígenes Costa": {"estudantes": 3000, "docentes": 180, "tecnicos": 85, "terceirizados": 70},
-      "Reitoria": {"estudantes": 0, "docentes": 20, "tecnicos": 140, "terceirizados": 50}
+      "Campus Jorge Amado": {
+        "estudantes": 2500,
+        "docentes": 150,
+        "tecnicos": 70,
+        "terceirizados": 60
+      },
+      "Campus Paulo Freire": {
+        "estudantes": 1500,
+        "docentes": 90,
+        "tecnicos": 45,
+        "terceirizados": 40
+      },
+      "Campus Sosígenes Costa": {
+        "estudantes": 3000,
+        "docentes": 180,
+        "tecnicos": 85,
+        "terceirizados": 70
+      },
+      "Reitoria": {
+        "estudantes": 0,
+        "docentes": 20,
+        "tecnicos": 140,
+        "terceirizados": 50
+      }
     }
   },
   "area": {
     "crescimento_projecao_anual": 0.05,
-    "anos_projetados": [2027, 2028]
+    "anos_projetados": [
+      2027,
+      2028
+    ]
+  },
+  "planilha": {
+    "url": "https://docs.google.com/spreadsheets/d/1VgHY6NmCQLtA3lcfQAzGIRqJFZGHwcGhZ4zaXkqOmz4/edit",
+    "id": "1VgHY6NmCQLtA3lcfQAzGIRqJFZGHwcGhZ4zaXkqOmz4",
+    "apps_script_url": "https://script.google.com/macros/s/AKfycbyLQMA7D9sohZ-nqo-Z2ydVuBi-7igmEFPmhYy3gbOLMsawx78E-DyfnvecMSb-00om/exec",
+    "abas": {
+      "COV_PESSOAS": {
+        "arquivo": "pessoas_por_campus.csv",
+        "colunas": [
+          "ano",
+          "campus",
+          "estudantes",
+          "docentes",
+          "tecnicos",
+          "terceirizados"
+        ]
+      },
+      "COV_AREA_CAMPUS": {
+        "arquivo": "area_por_campus.csv",
+        "colunas": [
+          "ano",
+          "campus",
+          "area_construida_m2",
+          "area_total_m2"
+        ]
+      },
+      "COV_CALENDARIO": {
+        "arquivo": "calendario_letivo_ufsb.csv",
+        "colunas": [
+          "ano",
+          "campus",
+          "periodo",
+          "inicio",
+          "termino"
+        ]
+      },
+      "COV_PRECIPITACAO": {
+        "arquivo": "precipitacao_manual.csv",
+        "colunas": [
+          "mes",
+          "campus",
+          "precip_total_mm"
+        ],
+        "opcional": true
+      }
+    }
   }
 }

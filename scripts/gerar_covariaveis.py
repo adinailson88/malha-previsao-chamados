@@ -89,17 +89,24 @@ def gerar() -> int:
 
 
 def verificar(modo: str) -> int:
+    """Para cada covariavel usa o arquivo vindo da planilha, se existir; senao o de reserva."""
+    ext = RAIZ / "dados_externos"
+    candidatos = {
+        "area": [ext / "area_por_campus.csv", SAIDA_AREA],
+        "pessoas": [ext / "pessoas_por_campus.csv", SAIDA_PESSOAS],
+        "precipitacao": [ext / "precipitacao_mensal_por_campus.csv", ext / "precipitacao_manual.csv"],
+        "calendario": [ext / "calendario_letivo_ufsb.csv"],
+    }
     estado = {}
-    for nome, caminho in (("area", SAIDA_AREA), ("pessoas", SAIDA_PESSOAS),
-                          ("precipitacao", RAIZ / "dados_externos" / "precipitacao_mensal_por_campus.csv"),
-                          ("calendario", RAIZ / "dados_externos" / "calendario_letivo_ufsb.csv")):
-        if not caminho.exists():
+    for nome, caminhos in candidatos.items():
+        achado = next((c for c in caminhos if c.exists()), None)
+        if achado is None:
             estado[nome] = "AUSENTE"
             continue
-        with caminho.open(encoding="utf-8") as f:
+        with achado.open(encoding="utf-8") as f:
             rows = list(csv.DictReader(f))
-        origens = sorted({r.get("origem") or r.get("status") or "REAL_FONTE_EXTERNA" for r in rows})
-        estado[nome] = ",".join(origens)
+        origens = sorted({r.get("origem") or r.get("status") or "FONTE_EXTERNA" for r in rows})
+        estado[nome] = f"{achado.name}: {','.join(origens)}"
     for k, v in estado.items():
         print(f"{k}: {v}")
     if modo == "artigo":

@@ -68,14 +68,15 @@ Rolling-origin com no mínimo 24 origens, horizontes de 1, 3, 6 e 12 meses, e ag
 
 ### 5.5 Dados externos: situação e decisões do autor
 
-Decisões do autor em 03/11/2026: (a) a precipitação mensal por cidade pode vir da internet, calculada como média dos valores diários do mês; (b) se não houver número de pessoas, usar dados simulados e substituí-los depois pelos reais; (c) o calendário acadêmico é o da UFSB; (d) quando faltar área ou número de pessoas, projetar o ano seguinte como o último valor mais 5%.
+Decisões do autor em 03/11/2026: (a) a precipitação mensal por cidade pode vir da internet; a definição inicial era a média dos valores diários, e o autor decidiu em seguida usar a soma mensal (mm), que passou a ser a variável principal; (b) se não houver número de pessoas, usar dados simulados e substituí-los depois pelos reais; (c) o calendário acadêmico é o da UFSB; (d) quando faltar área ou número de pessoas, projetar o ano seguinte como o último valor mais 5%.
 
 1. Planilha: o manifesto do hub lista 24 abas globais e nenhuma delas contém número de pessoas, calendário letivo ou área por campus; a única aba de área é "Área Manutenção", global e anual. Portanto esses dados não existem na planilha lida.
-2. Precipitação: não foi possível baixar, porque a rede da sessão bloqueia Open-Meteo, INMET e NASA POWER. Foi criado `scripts/coletar_precipitacao.py` (testado apenas com dados sintéticos de verificação da agregação), que usa a API Open-Meteo por coordenada dos municípios de Itabuna, Teixeira de Freitas, Porto Seguro e Ilhéus. É reanálise e não estação; a escolha é do autor.
+2. Precipitação: não foi possível baixar, porque a rede da sessão bloqueia Open-Meteo, INMET e NASA POWER. Foi criado `scripts/coletar_precipitacao.py` (testado apenas com dados sintéticos de verificação da agregação; variável principal: soma mensal em mm), que usa a API Open-Meteo por coordenada dos municípios de Itabuna, Teixeira de Freitas, Porto Seguro e Ilhéus. É reanálise e não estação; a escolha é do autor.
 3. Pessoas: criado `dados_externos/pessoas_por_campus_SIMULADO.csv` com valores arbitrários, marcados `SIMULADO`, e projeção de +5% ao ano a partir de 2027. O script de verificação bloqueia o uso em artigo.
 4. Calendário: o site da UFSB está bloqueado na sessão. A busca indicou que a UFSB passou do regime quadrimestral para o semestral em 2024 (Resolução Consuni nº 22/2022, segundo notícia institucional), e que os PDFs de calendário estão em `ufsb.edu.br/acesso-informacao/documentos/109-documentos-academicos/402-calendarios`. Criado `dados_externos/calendario_letivo_ufsb.csv` com os anos e links e status `PENDENTE`. A variável deve ser a fração de dias do mês em período letivo.
 5. Área: criado `dados_externos/area_global_projetada.csv` (observada de 2015 a 2026; 2027 e 2028 projetados com +5% ao ano). A área por campus continua inexistente.
-6. Identificação do que ainda falta para resultados válidos: dados reais de pessoas, precipitação coletada, calendário preenchido e área por campus.
+6. Planilha de origem: a planilha CHAMADOS (identificador no código do motor) passa a ser a fonte única editável; `scripts/sincronizar_covariaveis_planilha.py` lê as abas `COV_PESSOAS`, `COV_AREA_CAMPUS`, `COV_CALENDARIO` e `COV_PRECIPITACAO` pelo endpoint do Apps Script e o workflow `sincronizar-covariaveis.yml` executa a rotina diariamente. Não foi verificado se o Apps Script atual serve abas com esses nomes.
+7. Identificação do que ainda falta para resultados válidos: dados reais de pessoas, precipitação coletada, calendário preenchido e área por campus.
 
 ### 5.6 Resultado preliminar de verificação (somente com o que existe hoje)
 

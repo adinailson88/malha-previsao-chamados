@@ -1,5 +1,11 @@
 # Malha Previsao de Chamados
 
+> ## Planilha de origem dos dados
+>
+> **[Abrir a planilha CHAMADOS no Google Sheets](https://docs.google.com/spreadsheets/d/1VgHY6NmCQLtA3lcfQAzGIRqJFZGHwcGhZ4zaXkqOmz4/edit)**
+>
+> Os dados são mantidos na planilha; o repositório lê e não exige edição manual no GitHub. As abas `COV_PESSOAS`, `COV_AREA_CAMPUS`, `COV_CALENDARIO` e `COV_PRECIPITACAO` (opcional) alimentam as covariáveis das previsões, e os modelos de preenchimento estão em [`dados_externos/modelos_abas_planilha/`](dados_externos/modelos_abas_planilha/LEIA-ME.md). O workflow `Sincronizar covariaveis` lê essas abas todo dia (ou sob demanda, em Actions) e grava os CSVs em `dados_externos/`. O acesso à planilha depende das permissões do Google do usuário.
+
 Repositorio do Artigo 2 do ecossistema Malha IA: previsao temporal de volume de chamados de manutencao predial e estatisticas associadas.
 
 Repositorio-hub de dados: [adinailson88/malha-ia](https://github.com/adinailson88/malha-ia)  

@@ -6,11 +6,11 @@ Uso:
     python scripts/coletar_precipitacao.py --selftest # testa a agregacao sem rede
 
 Saida: dados_externos/precipitacao_mensal_por_campus.csv
-Colunas: mes, campus, municipio, precip_media_diaria_mm, precip_total_mm,
+Colunas: mes, campus, municipio, precip_total_mm, precip_media_diaria_mm,
          dias_validos, dias_no_mes, mes_completo, fonte
 
-A media mensal (mm/dia) e a variavel principal, conforme definicao do autor; a
-soma mensal (mm) e gravada para comparacao. Meses incompletos (mes corrente) ou
+A soma mensal (mm) e a variavel principal, conforme decisao do autor; a media dos
+valores diarios (mm/dia) e gravada como auxiliar. Meses incompletos (mes corrente) ou
 com menos de 80% de dias validos ficam com valor vazio.
 """
 
@@ -30,7 +30,7 @@ from urllib.request import Request, urlopen
 RAIZ = Path(__file__).resolve().parents[1]
 CONFIG = RAIZ / "dados_externos" / "config_covariaveis.json"
 SAIDA = RAIZ / "dados_externos" / "precipitacao_mensal_por_campus.csv"
-CAMPOS = ["mes", "campus", "municipio", "precip_media_diaria_mm", "precip_total_mm",
+CAMPOS = ["mes", "campus", "municipio", "precip_total_mm", "precip_media_diaria_mm",
           "dias_validos", "dias_no_mes", "mes_completo", "fonte"]
 
 

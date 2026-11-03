@@ -1,0 +1,56 @@
+name: Sincronizar covariaveis
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 7 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sincronizar-covariaveis
+  cancel-in-progress: false
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Ler abas COV_* da planilha
+        run: python scripts/sincronizar_covariaveis_planilha.py
+
+      - name: Coletar precipitacao
+        if: ${{ !cancelled() }}
+        run: python scripts/coletar_precipitacao.py
+
+      - name: Gerar area projetada e reserva simulada
+        if: ${{ !cancelled() }}
+        run: python scripts/gerar_covariaveis.py
+
+      - name: Verificar origem das covariaveis
+        if: ${{ !cancelled() }}
+        run: python scripts/gerar_covariaveis.py --verificar
+
+      - name: Commitar atualizacoes
+        if: ${{ !cancelled() }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dados_externos
+          if git diff --cached --quiet; then
+            echo "Sem alteracoes nas covariaveis."
+          else
+            git commit -m "Atualiza covariaveis externas"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push
+          fi

@@ -108,7 +108,7 @@ Efeito do defeito de datas sobre as propriedades da série: com a inversão de d
 ### 2.4 Métricas, validação temporal e comparadores atuais
 
 1. Métricas calculadas: MAE, RMSE, R², MAPE, AIC, BIC por modelo, CRPS empírico, desvio das dobras de validação cruzada, ranking multicritério (RMSE 0,5; CRPS 0,3; desvio 0,2). Não há MASE, sMAPE ou RMSSE, que são necessários para comparar séries com escalas distintas e evitar o viés do MAPE.
-2. Validação: um holdout único de 12 meses (RMSE usado para eleger o "vencedor"), mais 3 dobras rolling-origin de 12 meses para seis modelos; a validação cruzada não inclui Prophet/UC, Gradient Boosting, ensemble nem LSTM, de modo que o vencedor multicritério combina RMSE do holdout com o desvio de dobras ausente para ele ("—").
+2. Validação: um holdout único de 12 meses (RMSE usado para eleger o "vencedor"), mais 3 dobras rolling-origin de 12 meses para seis modelos; a validação cruzada não inclui Prophet/UC, Gradient Boosting, ensemble nem LSTM, de modo que o vencedor multicritério combina RMSE do holdout com o desvio de dobras ausente para ele (célula sem valor).
 3. Comparadores: ARIMA, Naive sazonal e Drift. Não há média móvel ou média histórica, que na série corrigida são fortes (item 2.5).
 4. Teste de acurácia preditiva: Diebold-Mariano aplicado com h = 1 (`teste_diebold_mariano`, linhas 2389 a 2424, perda quadrática, p-valor pela normal) sobre resíduos in-sample (141 pares), não sobre erros de previsão fora da amostra multi-horizonte; o estatístico não aplica a correção de Harvey-Leybourne-Newbold nem erros robustos a heterocedasticidade e autocorrelação para h > 1, e os erros apresentam heterocedasticidade (Breusch-Pagan com p < 0,05 em ARIMA e SARIMAX-12) e não normalidade (Jarque-Bera com p ≈ 0).
 

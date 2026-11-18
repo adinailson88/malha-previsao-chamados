@@ -1,6 +1,6 @@
 ﻿Variável Exógena,Lag Mínimo p,p-valor Mínimo,Significativo (α=0.05),Recomendação,Interpretação
-Precipitacao_mm,5,0.0715,Não,Considerar remoção (efeito não significativo),Não há causalidade Granger detectada (p_min=0.0715)
-Periodo_Letivo_Bin,3,0.0988,Não,Considerar remoção (efeito não significativo),Não há causalidade Granger detectada (p_min=0.0988)
+Precipitacao_mm,5,0.1094,Não,Considerar remoção (efeito não significativo),Não há causalidade Granger detectada (p_min=0.1094)
+Periodo_Letivo_Bin,3,0.0981,Não,Considerar remoção (efeito não significativo),Não há causalidade Granger detectada (p_min=0.0981)
 Area_Construida_m2,0,—,Não,Considerar remoção (efeito não significativo),Erro: The x values include a column with constant values and so the test statistic can
 Area_Total_m2,0,—,Não,Considerar remoção (efeito não significativo),Erro: The x values include a column with constant values and so the test statistic can
 ,,,,,

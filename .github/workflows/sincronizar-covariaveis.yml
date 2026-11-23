@@ -2,8 +2,10 @@ name: Sincronizar covariaveis
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 7 * * *'
+  # Agendamento desativado em 22/11/2026: as abas COV_* ainda nao existem na planilha CHAMADOS e o job falhava todo dia.
+  # Para reativar, crie as abas (modelos em dados_externos/modelos_abas_planilha/) e descomente as 2 linhas abaixo.
+  # schedule:
+  #   - cron: '17 7 * * *'
 
 permissions:
   contents: write
